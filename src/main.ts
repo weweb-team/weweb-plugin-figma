@@ -1,7 +1,4 @@
 // WeWeb Figma Plugin - Convert Figma designs to WeWeb components
-import { HtmlDefaultBuilder } from './figmatocode/htmlDefaultBuilder';
-import { HtmlTextBuilder } from './figmatocode/htmlTextBuilder';
-import { htmlMain } from './figmatocode/htmlMain';
 import { convertNodesToWeweb } from './figmatocode/wewebJsonConverter';
 
 export default function () {
