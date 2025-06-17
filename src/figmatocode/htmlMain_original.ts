@@ -1,35 +1,27 @@
-import { indentString } from "./common/indentString";
+import { indentString } from "../common/indentString";
 import { HtmlTextBuilder } from "./htmlTextBuilder";
 import { HtmlDefaultBuilder } from "./htmlDefaultBuilder";
 import { htmlAutoLayoutProps } from "./builderImpl/htmlAutoLayout";
-import { formatWithJSX } from "./common/parseJSX";
+import { formatWithJSX } from "../common/parseJSX";
 import {
   PluginSettings,
   HTMLPreview,
   AltNode,
   HTMLSettings,
   ExportableNode,
-} from "./types";
-import { renderAndAttachSVG } from "./altNodes/altNodeUtils";
-import { getVisibleNodes } from "./common/nodeVisibility";
+} from "types";
+import { renderAndAttachSVG } from "../altNodes/altNodeUtils";
+import { getVisibleNodes } from "../common/nodeVisibility";
 import {
   exportNodeAsBase64PNG,
   getPlaceholderImage,
   nodeHasImageFill,
-} from "./common/images";
-import { addWarning } from "./common/commonConversionWarnings";
-import {
-  cssCollection,
-  generateUniqueClassName,
-  resetClassNameCounters,
-  stylesToCSS,
-  getComponentName,
-  resetCssCollection,
-  setIsPreviewGlobal,
-  getIsPreviewGlobal,
-} from "./htmlShared";
+} from "../common/images";
+import { addWarning } from "../common/commonConversionWarnings";
 
 const selfClosingTags = ["img"];
+
+export let isPreviewGlobal = false;
 
 let previousExecutionCache: { style: string; text: string }[];
 
@@ -45,6 +37,105 @@ export type HtmlGenerationMode =
   | "jsx"
   | "styled-components"
   | "svelte";
+
+// CSS Collection for external stylesheet or styled-components
+interface CSSCollection {
+  [className: string]: {
+    styles: string[];
+    nodeName?: string;
+    nodeType?: string;
+    element?: string; // Base HTML element to use
+  };
+}
+
+export let cssCollection: CSSCollection = {};
+
+// Instance counters for class name generation - we keep this but primarily as a fallback
+const classNameCounters: Map<string, number> = new Map();
+
+// Generate a class name - prefer direct uniqueId, but fall back to counter-based if needed
+export function generateUniqueClassName(prefix = "figma"): string {
+  // Sanitize the prefix to ensure valid CSS class
+  const sanitizedPrefix =
+    prefix.replace(/[^a-zA-Z0-9_-]/g, "").replace(/^[0-9_-]/, "f") || // Ensure it doesn't start with a number or special char
+    "figma";
+
+  // Most of the time, we'll just use the prefix directly as it's pre-generated to be unique
+  // But keep the counter logic as a fallback
+  const count = classNameCounters.get(sanitizedPrefix) || 0;
+  classNameCounters.set(sanitizedPrefix, count + 1);
+
+  // Only add suffix if this isn't the first instance
+  return count === 0
+    ? sanitizedPrefix
+    : `${sanitizedPrefix}_${count.toString().padStart(2, "0")}`;
+}
+
+// Reset all class name counters - call this at the start of processing
+export function resetClassNameCounters(): void {
+  classNameCounters.clear();
+}
+
+// Convert styles to CSS format
+export function stylesToCSS(styles: string[], isJSX: boolean): string[] {
+  return styles
+    .map((style) => {
+      // Skip empty styles
+      if (!style.trim()) return "";
+
+      // Handle JSX format if needed
+      if (isJSX) {
+        return style.replace(/^([a-zA-Z0-9]+):/, (match, prop) => {
+          // Convert camelCase to kebab-case for CSS
+          return (
+            prop
+              .replace(/([a-z0-9]|(?=[A-Z]))([A-Z])/g, "$1-$2")
+              .toLowerCase() + ":"
+          );
+        });
+      }
+      return style;
+    })
+    .filter(Boolean); // Remove empty entries
+}
+
+// Get proper component name from node info
+export function getComponentName(
+  node: any,
+  className?: string,
+  nodeType = "div",
+): string {
+  // Start with Styled prefix
+  let name = "Styled";
+
+  // Use uniqueName if available, otherwise use name
+  const nodeName: string = node.uniqueName || node.name;
+
+  // Try to use node name first
+  if (nodeName && nodeName.length > 0) {
+    // Clean up the node name and capitalize first letter
+    const cleanName = nodeName
+      .replace(/[^a-zA-Z0-9]/g, "")
+      .replace(/^[a-z]/, (match) => match.toUpperCase());
+
+    name += cleanName || nodeType.charAt(0).toUpperCase() + nodeType.slice(1);
+  }
+  // Fall back to className if provided
+  else if (className) {
+    const parts = className.split("-");
+    if (parts.length > 0 && parts[0]) {
+      name += parts[0].charAt(0).toUpperCase() + parts[0].slice(1);
+    } else {
+      name += nodeType.charAt(0).toUpperCase() + nodeType.slice(1);
+    }
+  }
+  // Last resort
+  else {
+    name += nodeType.charAt(0).toUpperCase() + nodeType.slice(1);
+  }
+
+  return name;
+}
 
 // Get the collected CSS as a string with improved formatting
 export function getCollectedCSS(): string {
@@ -230,9 +321,9 @@ export const htmlMain = async (
   settings: PluginSettings,
   isPreview: boolean = false,
 ): Promise<HtmlOutput> => {
-  setIsPreviewGlobal(isPreview);
+  isPreviewGlobal = isPreview;
   previousExecutionCache = [];
-  resetCssCollection();
+  cssCollection = {};
   resetClassNameCounters(); // Reset counters for each new generation
 
   let htmlContent = await htmlWidgetGenerator(sceneNode, settings);
@@ -328,7 +419,7 @@ const convertNode = (settings: HTMLSettings) => async (node: SceneNode) => {
     case "LINE":
       return htmlLine(node, settings);
     case "VECTOR":
-      if (!settings.embedVectors && !getIsPreviewGlobal()) {
+      if (!settings.embedVectors && !isPreviewGlobal) {
         addWarning("Vector is not supported");
       }
       return await htmlContainer(

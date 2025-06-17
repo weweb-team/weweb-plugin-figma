@@ -281,7 +281,7 @@ export class HtmlDefaultBuilder {
     if (property === "text") {
       this.addStyles(
         formatWithJSX(
-          "text",
+          "color",
           this.isJSX,
           htmlColorFromFills(paintArray as any),
         ),

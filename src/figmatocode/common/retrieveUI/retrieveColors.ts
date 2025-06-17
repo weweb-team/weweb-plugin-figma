@@ -14,7 +14,7 @@ import {
 import {
   htmlColorFromFill,
   htmlGradientFromFills,
-} from "../../html/builderImpl/htmlColor";
+} from "../../builderImpl/htmlColor";
 import { calculateContrastRatio } from "./commonUI";
 import {
   LinearGradientConversion,

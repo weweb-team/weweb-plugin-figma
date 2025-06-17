@@ -1,5 +1,3 @@
-// Shared state and utilities to avoid circular imports between htmlMain and htmlTextBuilder
-
 // CSS Collection for external stylesheet or styled-components
 interface CSSCollection {
   [className: string]: {
@@ -36,6 +34,11 @@ export function generateUniqueClassName(prefix = "figma"): string {
 // Reset all class name counters - call this at the start of processing
 export function resetClassNameCounters(): void {
   classNameCounters.clear();
+}
+
+// Reset CSS collection - call this at the start of processing
+export function resetCssCollection(): void {
+  cssCollection = {};
 }
 
 // Convert styles to CSS format
@@ -99,7 +102,13 @@ export function getComponentName(
   return name;
 }
 
-// Reset CSS collection
-export function resetCssCollection(): void {
-  cssCollection = {};
+// Global preview state
+export let isPreviewGlobal = false;
+
+export function setIsPreviewGlobal(value: boolean): void {
+  isPreviewGlobal = value;
+}
+
+export function getIsPreviewGlobal(): boolean {
+  return isPreviewGlobal;
 }

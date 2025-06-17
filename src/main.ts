@@ -1,5 +1,7 @@
 // WeWeb Figma Plugin - Convert Figma designs to WeWeb components
 import { convertNodesToWeweb } from './figmatocode/wewebJsonConverter';
+import { htmlMain } from './figmatocode/htmlMain';
+import { nodesToJSON } from './figmatocode/altNodes/jsonNodeConversion';
 
 export default function () {
     figma.showUI(__html__, { 
@@ -29,6 +31,50 @@ export default function () {
                     figma.ui.postMessage({
                         type: 'WEWEB_CONVERTED',
                         component: null,
+                        error: error.message,
+                    });
+                }
+            }
+        }
+        
+        if (message.type === 'CONVERT_TO_HTML') {
+            const selection = figma.currentPage.selection;
+            if (selection.length > 0) {
+                try {
+                    // Use comprehensive settings like the original FigmaToCode
+                    const pluginSettings = {
+                        framework: "HTML",
+                        showLayerNames: false,          // Original uses false for cleaner output
+                        useOldPluginVersion2025: false,
+                        responsiveRoot: false,
+                        flutterGenerationMode: "snippet",
+                        swiftUIGenerationMode: "snippet",
+                        roundTailwindValues: true,
+                        roundTailwindColors: true,
+                        useColorVariables: true,
+                        customTailwindPrefix: "",
+                        embedImages: false,
+                        embedVectors: false,
+                        htmlGenerationMode: "html",
+                        tailwindGenerationMode: "jsx",
+                        baseFontSize: 16,
+                        useTailwind4: false,
+                    };
+                    
+                    // Convert nodes to JSON format first like the original FigmaToCode
+                    const convertedNodes = await nodesToJSON([selection[0]], pluginSettings);
+                    const htmlResult = await htmlMain(convertedNodes, pluginSettings, true);  // isPreview = true like the original
+                    figma.ui.postMessage({
+                        type: 'HTML_CONVERTED',
+                        html: htmlResult.html,
+                        css: htmlResult.css,
+                    });
+                } catch (error) {
+                    console.error('HTML conversion error:', error);
+                    figma.ui.postMessage({
+                        type: 'HTML_CONVERTED',
+                        html: null,
+                        css: null,
                         error: error.message,
                     });
                 }

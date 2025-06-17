@@ -3,7 +3,7 @@ import { curry } from "../common/curry";
 import { exportAsyncProxy } from "../common/exportAsyncProxy";
 import { addWarning } from "../common/commonConversionWarnings";
 import { getVariableNameFromColor } from "./jsonNodeConversion";
-import { htmlColor } from "../html/builderImpl/htmlColor";
+import { htmlColor } from "../builderImpl/htmlColor";
 
 export const overrideReadonlyProperty = curry(
   <T, K extends keyof T>(prop: K, value: any, obj: T): T =>

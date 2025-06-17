@@ -23,7 +23,11 @@ interface WewebElement {
   slots?: {
     children?: WewebElement[];
   };
-  style?: WewebStyle;
+  styles: {
+    default: Record<string, any>;
+    tablet?: Record<string, any>;
+    mobile?: Record<string, any>;
+  };
   props?: WewebProps;
 }
 
@@ -84,9 +88,8 @@ function createWewebElement(
     element.slots = { children };
   }
 
-  if (Object.keys(styles).length > 0) {
-    element.style = { default: styles };
-  }
+  // Always add styles object, even if empty
+  element.styles = { default: styles };
 
   if (Object.keys(props).length > 0) {
     element.props = { default: props };
@@ -135,12 +138,20 @@ export async function convertToWewebElement(
  * Convert TEXT node to ww-text element
  */
 function convertTextNode(node: TextNode, settings: HTMLSettings): WewebElement {
-  const textBuilder = new HtmlTextBuilder(node, settings);
+  // Now we can use HtmlTextBuilder properly (circular dependency fixed)
+  const builder = new HtmlTextBuilder(node, settings);
   
-  // Get common styles
-  textBuilder.commonPositionStyles().commonShapeStyles();
-  const styleString = textBuilder.styles.join('; ');
+  // Get rich text styles the same way as HTML converter
+  builder.commonPositionStyles();
+  builder.textTrim();
+  builder.textAlignHorizontal();
+  builder.textAlignVertical();
+  
+  const styleString = builder.styles.join('; ');
   const styles = parseStyleString(styleString);
+  
+  // Debug: log the final styles
+  console.log(`Text "${node.name}" - Final styles:`, styles);
   
   // Get text content
   const text = node.characters || "";
@@ -167,7 +178,8 @@ function convertTextNode(node: TextNode, settings: HTMLSettings): WewebElement {
  */
 function convertImageNode(node: SceneNode, settings: HTMLSettings): WewebElement {
   const builder = new HtmlDefaultBuilder(node, settings);
-  builder.commonPositionStyles().commonShapeStyles();
+  builder.commonPositionStyles();
+  builder.commonShapeStyles();
   const styleString = builder.styles.join('; ');
   const styles = parseStyleString(styleString);
   
@@ -187,9 +199,17 @@ function convertImageNode(node: SceneNode, settings: HTMLSettings): WewebElement
  */
 async function convertFrameNode(node: SceneNode, settings: HTMLSettings): Promise<WewebElement> {
   const builder = new HtmlDefaultBuilder(node, settings);
-  builder.commonPositionStyles().commonShapeStyles();
+  builder.commonPositionStyles();
+  builder.commonShapeStyles();
+  
+  // Debug: log the styles being generated
+  console.log(`Frame "${node.name}" - Raw styles:`, builder.styles);
+  
   const styleString = builder.styles.join('; ');
   const styles = parseStyleString(styleString);
+  
+  // Debug: log the parsed styles
+  console.log(`Frame "${node.name}" - Parsed styles:`, styles);
   
   // Convert children if they exist
   const children: WewebElement[] = [];
