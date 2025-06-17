@@ -2,6 +2,7 @@
 import { HtmlDefaultBuilder } from './figmatocode/htmlDefaultBuilder';
 import { HtmlTextBuilder } from './figmatocode/htmlTextBuilder';
 import { htmlMain } from './figmatocode/htmlMain';
+import { convertNodesToWeweb } from './figmatocode/wewebJsonConverter';
 
 export default function () {
     figma.showUI(__html__, { 
@@ -16,7 +17,7 @@ export default function () {
             const selection = figma.currentPage.selection;
             if (selection.length > 0) {
                 try {
-                    const htmlResult = await htmlMain([selection[0]], {
+                    const wewebElements = await convertNodesToWeweb([selection[0]], {
                         htmlGenerationMode: 'html',
                         showLayerNames: true,
                         embedVectors: false,
@@ -24,7 +25,7 @@ export default function () {
                     });
                     figma.ui.postMessage({
                         type: 'WEWEB_CONVERTED',
-                        component: htmlResult,
+                        component: wewebElements.length > 0 ? wewebElements[0] : null,
                     });
                 } catch (error) {
                     console.error('Conversion error:', error);
