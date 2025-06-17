@@ -8,7 +8,10 @@
     "preview": "plugma preview",
     "release": "plugma release",
     "lint": "eslint .",
-    "lint:fix": "eslint --fix ."
+    "lint:fix": "eslint --fix .",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:run": "vitest run"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.10",
@@ -30,11 +33,14 @@
     "@iconify/tailwind4": "^1.0.6",
     "@types/node": "^24.0.3",
     "@vitejs/plugin-vue": "^5.1.4",
+    "@vitest/ui": "^3.2.3",
     "eslint": "^9.28.0",
     "eslint-plugin-format": "^1.0.1",
+    "jsdom": "^26.1.0",
     "plugma": "^1.2.9",
     "typescript": "~5.6.2",
     "vite": "^5.4.10",
+    "vitest": "^3.2.3",
     "vue-tsc": "^2.1.8"
   },
   "plugma": {
