@@ -199,10 +199,12 @@ function validateSizingApproaches(htmlStyles: Record<string, any>, wewebStyles: 
   for (const prop of sizeProps) {
     if (htmlStyles[prop] && wewebStyles[prop]) {
       // Document the different approaches
-      const htmlUsesPixels = htmlStyles[prop].includes('px')
-      const wewebUsesPercent = wewebStyles[prop].includes('%')
+      const htmlValue = String(htmlStyles[prop])
+      const wewebValue = String(wewebStyles[prop])
+      const htmlUsesPixels = htmlValue.includes('px')
+      const wewebUsesPercent = wewebValue.includes('%')
       
-      console.debug(`${testName} sizing: HTML uses ${htmlStyles[prop]} (pixels: ${htmlUsesPixels}), WeWeb uses ${wewebStyles[prop]} (percent: ${wewebUsesPercent})`)
+      console.debug(`${testName} sizing: HTML uses ${htmlValue} (pixels: ${htmlUsesPixels}), WeWeb uses ${wewebValue} (percent: ${wewebUsesPercent})`)
       
       // Both should have some sizing approach
       expect(htmlStyles[prop], `HTML should have ${prop} styling`).toBeTruthy()

@@ -1,9 +1,11 @@
 import { HtmlDefaultBuilder } from "./htmlDefaultBuilder";
 import { HtmlTextBuilder } from "./htmlTextBuilder";
+import { WewebBuilder } from "./wewebBuilder";
 import { HTMLSettings } from "./types";
 import { htmlColorFromFills, buildBackgroundValues } from "./builderImpl/htmlColor";
 import { retrieveTopFill } from "./common/retrieveFill";
 import { nodeHasImageFill } from "./common/images";
+import { htmlAutoLayoutProps } from "./builderImpl/htmlAutoLayout";
 
 interface WewebStyle {
   default?: Record<string, any>;
@@ -29,6 +31,7 @@ interface WewebElement {
     mobile?: Record<string, any>;
   };
   props?: WewebProps;
+  attributes?: Record<string, string>; // For data-* attributes
 }
 
 /**
@@ -77,7 +80,8 @@ function createWewebElement(
   name: string,
   children: WewebElement[] = [],
   styles: Record<string, any> = {},
-  props: Record<string, any> = {}
+  props: Record<string, any> = {},
+  attributes: Record<string, string> = {}
 ): WewebElement {
   const element: WewebElement = {
     tag,
@@ -95,6 +99,10 @@ function createWewebElement(
     element.props = { default: props };
   }
 
+  if (Object.keys(attributes).length > 0) {
+    element.attributes = attributes;
+  }
+
   return element;
 }
 
@@ -103,7 +111,8 @@ function createWewebElement(
  */
 export async function convertToWewebElement(
   node: SceneNode,
-  settings: HTMLSettings
+  settings: HTMLSettings,
+  isRootNode: boolean = false
 ): Promise<WewebElement> {
   const name = node.name || node.type.toLowerCase();
 
@@ -116,21 +125,21 @@ export async function convertToWewebElement(
       if ("fills" in node && nodeHasImageFill(node as any)) {
         return convertImageNode(node, settings);
       }
-      return convertFrameNode(node, settings);
+      return convertFrameNode(node, settings, isRootNode);
     
     case "FRAME":
     case "COMPONENT":
     case "INSTANCE":
     case "COMPONENT_SET":
     case "SECTION":
-      return convertFrameNode(node, settings);
+      return convertFrameNode(node, settings, isRootNode);
     
     case "GROUP":
       return convertGroupNode(node, settings);
     
     default:
       // Fallback to div for unsupported types
-      return convertFrameNode(node, settings);
+      return convertFrameNode(node, settings, isRootNode);
   }
 }
 
@@ -141,17 +150,41 @@ function convertTextNode(node: TextNode, settings: HTMLSettings): WewebElement {
   // Now we can use HtmlTextBuilder properly (circular dependency fixed)
   const builder = new HtmlTextBuilder(node, settings);
   
-  // Get rich text styles the same way as HTML converter
+  // EXACT SAME LOGIC AS HTML TEXT CONVERTER
   builder.commonPositionStyles();
+  builder.commonShapeStyles();
   builder.textTrim();
   builder.textAlignHorizontal();
   builder.textAlignVertical();
+  builder.fontSize(node);
+  
+  // TEXT NODES ALWAYS USE ABSOLUTE POSITIONING (like HTML)
+  builder.size();
+  builder.position();
+  builder.blend();
+  
+  // Background and effects
+  if ('fills' in node && node.fills) {
+    builder.applyFillsToStyle(node.fills, "background");
+  }
+  builder.border(settings);
+  builder.shadow();
+  builder.blur();
+  
+  // ADD MISSING: Get text segment styles for font properties
+  const textSegments = builder.getTextSegments(node);
+  if (textSegments.length > 0) {
+    // Parse the segment style and add it to builder
+    const segmentStyleString = textSegments[0].style;
+    if (segmentStyleString) {
+      // Add the segment styles to the builder
+      const segmentStyles = segmentStyleString.split(';').filter(s => s.trim());
+      builder.styles.push(...segmentStyles);
+    }
+  }
   
   const styleString = builder.styles.join('; ');
   const styles = parseStyleString(styleString);
-  
-  // Debug: log the final styles
-  console.log(`Text "${node.name}" - Final styles:`, styles);
   
   // Get text content
   const text = node.characters || "";
@@ -166,7 +199,7 @@ function convertTextNode(node: TextNode, settings: HTMLSettings): WewebElement {
   else if (nodeName.includes("button")) tag = "button";
   
   const props = {
-    text: { en: text },
+    text: text,
     tag
   };
 
@@ -187,7 +220,7 @@ function convertImageNode(node: SceneNode, settings: HTMLSettings): WewebElement
   const props = {
     url: "https://cdn.weweb.app/public/images/no_image_selected.png",
     objectFit: "cover",
-    alt: { en: node.name || "Image" },
+    alt: node.name || "Image",
     loading: "lazy"
   };
 
@@ -197,26 +230,49 @@ function convertImageNode(node: SceneNode, settings: HTMLSettings): WewebElement
 /**
  * Convert frame/container node to ww-div element
  */
-async function convertFrameNode(node: SceneNode, settings: HTMLSettings): Promise<WewebElement> {
-  const builder = new HtmlDefaultBuilder(node, settings);
+async function convertFrameNode(node: SceneNode, settings: HTMLSettings, isRootNode: boolean = false): Promise<WewebElement> {
+  // Use WewebBuilder for better size handling
+  const builder = new WewebBuilder(node, settings, isRootNode);
+  
+  // ALWAYS call these - exactly like HTML does
   builder.commonPositionStyles();
   builder.commonShapeStyles();
   
-  // Debug: log the styles being generated
-  console.log(`Frame "${node.name}" - Raw styles:`, builder.styles);
+  // The rest of the common styles
+  if ('fills' in node && node.fills) {
+    builder.applyFillsToStyle(node.fills, "background");
+  }
+  builder.border(settings);
+  builder.shadow();
+  builder.blur();
   
-  const styleString = builder.styles.join('; ');
+  // Additional styles array - same as htmlContainer
+  const additionalStyles: string[] = [];
+  
+  // If it has layout mode, add the auto-layout props
+  if ('layoutMode' in node && node.layoutMode !== 'NONE') {
+    try {
+      const autoLayoutStyles = htmlAutoLayoutProps(node as any, settings);
+      additionalStyles.push(...autoLayoutStyles);
+    } catch (error) {
+      console.warn(`Could not generate auto-layout styles for ${node.name}:`, error);
+    }
+    
+    // Also add padding for layout containers
+    builder.autoLayoutPadding();
+  }
+  
+  // Build with additional styles - same as htmlContainer
+  const allStyles = [...builder.styles, ...additionalStyles];
+  const styleString = allStyles.join('; ');
   const styles = parseStyleString(styleString);
-  
-  // Debug: log the parsed styles
-  console.log(`Frame "${node.name}" - Parsed styles:`, styles);
   
   // Convert children if they exist
   const children: WewebElement[] = [];
   if ("children" in node && node.children) {
     for (const child of node.children) {
       if (child.visible !== false) {
-        const childElement = await convertToWewebElement(child, settings);
+        const childElement = await convertToWewebElement(child, settings, false); // children are never root
         children.push(childElement);
       }
     }
@@ -230,7 +286,24 @@ async function convertFrameNode(node: SceneNode, settings: HTMLSettings): Promis
  */
 async function convertGroupNode(node: GroupNode, settings: HTMLSettings): Promise<WewebElement> {
   const builder = new HtmlDefaultBuilder(node, settings);
+  
+  // EXACT SAME LOGIC AS HTML GROUP CONVERTER
   builder.commonPositionStyles();
+  builder.commonShapeStyles();
+  builder.blend();
+  
+  // GROUPS ALWAYS USE ABSOLUTE POSITIONING (like HTML)
+  builder.size();
+  builder.position();
+  
+  // Background and effects
+  if ('fills' in node && node.fills) {
+    builder.applyFillsToStyle(node.fills, "background");
+  }
+  builder.border(settings);
+  builder.shadow();
+  builder.blur();
+  
   const styleString = builder.styles.join('; ');
   const styles = parseStyleString(styleString);
   
@@ -238,7 +311,7 @@ async function convertGroupNode(node: GroupNode, settings: HTMLSettings): Promis
   const children: WewebElement[] = [];
   for (const child of node.children) {
     if (child.visible !== false) {
-      const childElement = await convertToWewebElement(child, settings);
+      const childElement = await convertToWewebElement(child, settings, false); // children are never root
       children.push(childElement);
     }
   }
@@ -260,9 +333,12 @@ export async function convertNodesToWeweb(
 ): Promise<WewebElement[]> {
   const results: WewebElement[] = [];
   
-  for (const node of nodes) {
+  for (let i = 0; i < nodes.length; i++) {
+    const node = nodes[i];
     if (node.visible !== false) {
-      const element = await convertToWewebElement(node, settings);
+      // First node in the array is considered root (like HTML converter)
+      const isRoot = i === 0;
+      const element = await convertToWewebElement(node, settings, isRoot);
       results.push(element);
     }
   }

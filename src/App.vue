@@ -99,11 +99,23 @@ onMounted(() => {
         }
         
         if (message.type === 'RAW_NODE_COPIED') {
+            console.log('Received RAW_NODE_COPIED message');
             console.log('Raw Figma Node:', message.rawNode);
             
-            // Copy raw node data to clipboard
-            const rawNodeString = JSON.stringify(message.rawNode, null, 2);
-            copyToClipboard(rawNodeString, false);
+            if (message.error) {
+                console.error('Error in raw node extraction:', message.error);
+                alert('Error extracting node data: ' + message.error);
+                return;
+            }
+            
+            if (message.rawNode) {
+                // Copy raw node data to clipboard
+                const rawNodeString = JSON.stringify(message.rawNode, null, 2);
+                console.log('Copying to clipboard, length:', rawNodeString.length);
+                copyToClipboard(rawNodeString, false);
+            } else {
+                console.log('No raw node data received');
+            }
         }
     };
 });
@@ -125,10 +137,14 @@ function convertToHtml() {
 }
 
 function copyRawFigmaNode() {
+    console.log('copyRawFigmaNode clicked, hasSelection:', hasSelection.value);
     if (hasSelection.value) {
+        console.log('Sending COPY_RAW_NODE message');
         parent.postMessage({
             pluginMessage: { type: 'COPY_RAW_NODE' }
         }, '*');
+    } else {
+        console.log('No selection available');
     }
 }
 </script>
@@ -159,7 +175,7 @@ function copyRawFigmaNode() {
                     </Button>
                     
                     <Button @click="copyRawFigmaNode" class="w-full" variant="outline">
-                        Copy Raw Figma Node to Clipboard
+                        Copy Raw Figma Node Tree to Clipboard
                     </Button>
                 </div>
                 

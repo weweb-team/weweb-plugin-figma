@@ -1,0 +1,14 @@
+
+> test
+> vitest --run src/test/dashboardTest.test.ts
+
+
+ RUN  v3.2.3 /home/leoc/projects/weweb/weweb-plugin-figma
+
+ ✓ src/test/dashboardTest.test.ts (1 test) 29ms
+
+ Test Files  1 passed (1)
+      Tests  1 passed (1)
+   Start at  19:32:43
+   Duration  688ms (transform 286ms, setup 11ms, collect 345ms, tests 29ms, environment 171ms, prepare 45ms)
+
