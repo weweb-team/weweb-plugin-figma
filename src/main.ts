@@ -1,89 +1,13 @@
-// WeWeb Figma Plugin - Convert Figma designs to WeWeb components
-import { convertToWewebViaHtml } from './figmatocode/htmlToWewebConverter';
-import { htmlMain } from './figmatocode/htmlMain';
-import { nodesToJSON } from './figmatocode/altNodes/jsonNodeConversion';
-
+// Figma Plugin - Copy Figma Nodes
 export default function () {
     figma.showUI(__html__, { 
         width: 400, 
-        height: 600, 
+        height: 300, 
         themeColors: true,
-        title: "WeWeb Plugin for Figma"
+        title: "Copy Figma Nodes"
     });
 
     figma.ui.onmessage = async (message) => {
-        if (message.type === 'CONVERT_TO_WEWEB') {
-            const selection = figma.currentPage.selection;
-            if (selection.length > 0) {
-                try {
-                    console.log('WEWEB CONVERSION START');
-                    console.log('Selected node:', selection[0].name, selection[0].type);
-                    
-                    // Convert via HTML to ensure we get the same beautiful output
-                    console.log('Converting to WeWeb via HTML...');
-                    const wewebElements = await convertToWewebViaHtml([selection[0]]);
-                    console.log('WeWeb elements:', wewebElements);
-                    console.log('WeWeb elements length:', wewebElements.length);
-                    
-                    figma.ui.postMessage({
-                        type: 'WEWEB_CONVERTED',
-                        component: wewebElements.length > 0 ? wewebElements[0] : null,
-                    });
-                } catch (error) {
-                    console.error('Conversion error:', error);
-                    figma.ui.postMessage({
-                        type: 'WEWEB_CONVERTED',
-                        component: null,
-                        error: error.message,
-                    });
-                }
-            }
-        }
-        
-        if (message.type === 'CONVERT_TO_HTML') {
-            const selection = figma.currentPage.selection;
-            if (selection.length > 0) {
-                try {
-                    // Use comprehensive settings like the original FigmaToCode
-                    const pluginSettings = {
-                        framework: "HTML",
-                        showLayerNames: false,          // Original uses false for cleaner output
-                        useOldPluginVersion2025: false,
-                        responsiveRoot: false,
-                        flutterGenerationMode: "snippet",
-                        swiftUIGenerationMode: "snippet",
-                        roundTailwindValues: true,
-                        roundTailwindColors: true,
-                        useColorVariables: true,
-                        customTailwindPrefix: "",
-                        embedImages: false,
-                        embedVectors: false,
-                        htmlGenerationMode: "html",
-                        tailwindGenerationMode: "jsx",
-                        baseFontSize: 16,
-                        useTailwind4: false,
-                    };
-                    
-                    // Convert nodes to JSON format first like the original FigmaToCode
-                    const convertedNodes = await nodesToJSON([selection[0]], pluginSettings);
-                    const htmlResult = await htmlMain(convertedNodes, pluginSettings, true);  // isPreview = true like the original
-                    figma.ui.postMessage({
-                        type: 'HTML_CONVERTED',
-                        html: htmlResult.html,
-                        css: htmlResult.css,
-                    });
-                } catch (error) {
-                    console.error('HTML conversion error:', error);
-                    figma.ui.postMessage({
-                        type: 'HTML_CONVERTED',
-                        html: null,
-                        css: null,
-                        error: error.message,
-                    });
-                }
-            }
-        }
-        
         if (message.type === 'COPY_RAW_NODE') {
             console.log('Received COPY_RAW_NODE message');
             const selection = figma.currentPage.selection;

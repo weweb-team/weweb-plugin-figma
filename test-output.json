@@ -1,5 +1,0 @@
-
-> test
-> vitest --run src/test/realMatchTest.test.ts --reporter=json
-
-{"numTotalTestSuites":2,"numPassedTestSuites":2,"numFailedTestSuites":0,"numPendingTestSuites":0,"numTotalTests":1,"numPassedTests":1,"numFailedTests":0,"numPendingTests":0,"numTodoTests":0,"snapshot":{"added":0,"failure":false,"filesAdded":0,"filesRemoved":0,"filesRemovedList":[],"filesUnmatched":0,"filesUpdated":0,"matched":0,"total":0,"unchecked":0,"uncheckedKeysByFile":[],"unmatched":0,"updated":0,"didUpdate":false},"startTime":1750181114190,"success":true,"testResults":[{"assertionResults":[{"ancestorTitles":["Real Match Test - Multiple Fixtures"],"fullName":"Real Match Test - Multiple Fixtures should test if match rate holds for different fixtures","status":"passed","title":"should test if match rate holds for different fixtures","duration":30.78773799999999,"failureMessages":[],"meta":{}}],"startTime":1750181114935,"endTime":1750181114965.7878,"status":"passed","message":"","name":"/home/leoc/projects/weweb/weweb-plugin-figma/src/test/realMatchTest.test.ts"}]}
