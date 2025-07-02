@@ -1,11 +1,17 @@
+import type { InjectionKey, Ref } from 'vue';
 import { useMutationObserver } from '@vueuse/core';
-import { onMounted } from 'vue';
+import { onMounted, provide, ref } from 'vue';
+
+export const THEME_INJECTION_KEY: InjectionKey<Ref<boolean>> = Symbol('figma-theme');
 
 export function useFigmaTheme() {
+    const isDark = ref(false);
+
     const applyTheme = () => {
         const htmlElement = document.documentElement;
-        const isDarkMode = htmlElement.classList.contains('figma-dark');
-        if (isDarkMode) {
+        isDark.value = htmlElement.classList.contains('figma-dark');
+
+        if (isDark.value) {
             document.body.classList.add('dark');
         } else {
             document.body.classList.remove('dark');
@@ -28,4 +34,11 @@ export function useFigmaTheme() {
             attributeFilter: ['class'],
         },
     );
+
+    // Provide the theme state to child components
+    provide(THEME_INJECTION_KEY, isDark);
+
+    return {
+        isDark,
+    };
 }
