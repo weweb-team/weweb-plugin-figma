@@ -46,8 +46,8 @@ async function copyToClipboard(text: string, isVariables: boolean = false) {
 
         const success = document.execCommand('copy');
         textArea.remove();
-        if (prevActive)
-            prevActive.focus();
+        if (prevActive && 'focus' in prevActive)
+            (prevActive as HTMLElement).focus();
 
         if (success) {
             if (isVariables) {

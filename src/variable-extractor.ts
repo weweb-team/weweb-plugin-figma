@@ -119,157 +119,9 @@ export class VariableExtractor {
         }
     }
 
-    private async scanNodeForVariables(node: BaseNode): Promise<void> {
-    // Check if this node has bound variables
-        if ('boundVariables' in node && node.boundVariables) {
-            const boundVars = node.boundVariables as Record<string, VariableAlias | VariableAlias[]>;
-
-            // Log node with variables
-            if (Object.keys(boundVars).length > 0) {
-                console.log(`Found node with variables: ${node.name || node.type}`, boundVars);
-            }
-
-            for (const [property, binding] of Object.entries(boundVars)) {
-                if (!binding)
-                    continue;
-
-                // Handle both single bindings and arrays
-                const bindings = Array.isArray(binding) ? binding : [binding];
-
-                for (const varBinding of bindings) {
-                    if (varBinding && varBinding.type === 'VARIABLE_ALIAS' && varBinding.id) {
-                        console.log(`Extracting variable from property "${property}" with ID: ${varBinding.id}`);
-                        await this.extractVariableById(varBinding.id);
-                    } else if (varBinding && typeof varBinding === 'object' && 'id' in varBinding) {
-                        // Handle potential different format
-                        console.log(`Extracting variable from property "${property}" with ID (alt format): ${varBinding.id}`);
-                        await this.extractVariableById(varBinding.id as string);
-                    }
-                }
-            }
-        }
-
-        // Check for fills that might have bound variables or use color styles
-        if ('fills' in node && node.fills && node.fills !== figma.mixed) {
-            for (const fill of node.fills) {
-                if (fill.type === 'SOLID') {
-                    // Check for bound variables in the fill
-                    if ('boundVariables' in fill && fill.boundVariables?.color?.id) {
-                        console.log(`Found color variable in fill: ${fill.boundVariables.color.id}`);
-                        await this.extractVariableById(fill.boundVariables.color.id);
-                    }
-
-                    // Also check if the node uses fillStyleId (color styles)
-                    if ('fillStyleId' in node && node.fillStyleId) {
-                        console.log(`Found fill style ID: ${node.fillStyleId}`);
-                        // Try to get the style and see if it has variables
-                        try {
-                            const style = await figma.getStyleByIdAsync(node.fillStyleId);
-                            if (style && style.type === 'PAINT') {
-                                console.log(`Found color style: ${style.name}`);
-                                // Check if the style has bound variables
-                                if ('boundVariables' in style && style.boundVariables) {
-                                    console.log(`Style has bound variables:`, style.boundVariables);
-                                }
-                            }
-                        } catch {
-                            console.log(`Could not fetch style ${node.fillStyleId}`);
-                        }
-                    }
-                }
-            }
-        }
-
-        // Check for strokes that might have bound variables
-        if ('strokes' in node && node.strokes) {
-            for (const stroke of node.strokes) {
-                if (stroke.type === 'SOLID') {
-                    if ('boundVariables' in stroke && stroke.boundVariables?.color?.id) {
-                        console.log(`Found color variable in stroke: ${stroke.boundVariables.color.id}`);
-                        await this.extractVariableById(stroke.boundVariables.color.id);
-                    }
-                }
-            }
-        }
-
-        // Also check for strokeStyleId
-        if ('strokeStyleId' in node && node.strokeStyleId) {
-            console.log(`Found stroke style ID: ${node.strokeStyleId}`);
-        }
-
-        // Recursively scan children
-        if ('children' in node && node.children) {
-            for (const child of node.children) {
-                await this.scanNodeForVariables(child);
-            }
-        }
-    }
-
-    private async extractVariableById(variableId: string): Promise<void> {
-    // Skip if already processed
-        if (this.processedVariableIds.has(variableId)) {
-            return;
-        }
-
-        this.processedVariableIds.add(variableId);
-
-        try {
-            const variable = await figma.variables.getVariableByIdAsync(variableId);
-            if (!variable) {
-                console.warn(`Could not find variable with ID: ${variableId}`);
-                return;
-            }
-
-            console.log(`Found library variable: ${variable.name}`);
-
-            // Get the variable's collection to access modes
-            const collection = await figma.variables.getVariableCollectionByIdAsync(variable.variableCollectionId);
-            if (!collection) {
-                console.warn(`Could not find collection for variable: ${variable.name}`);
-                return;
-            }
-
-            const wewebVariable = this.convertVariable(variable, collection, collection.modes);
-            if (wewebVariable) {
-                this.variables.set(wewebVariable.id, wewebVariable);
-                this.figmaToWeWebIdMap.set(variable.id, wewebVariable.id);
-            }
-        } catch (error) {
-            console.error(`Error extracting variable ${variableId}:`, error);
-        }
-    }
-
-    private async extractCollectionVariables(collection: VariableCollection): Promise<WeWebVariable[]> {
-        const variables: WeWebVariable[] = [];
-        const modes = collection.modes;
-
-        console.log(`Collection has ${collection.variableIds.length} variables and ${modes.length} modes`);
-
-        // Get all variables in this collection
-        for (const variableId of collection.variableIds) {
-            try {
-                const figmaVariable = await figma.variables.getVariableByIdAsync(variableId);
-                if (!figmaVariable) {
-                    console.warn(`Could not find variable with ID: ${variableId}`);
-                    continue;
-                }
-
-                const wewebVariable = this.convertVariable(figmaVariable, collection, modes);
-                if (wewebVariable) {
-                    variables.push(wewebVariable);
-                    this.figmaToWeWebIdMap.set(figmaVariable.id, wewebVariable.id);
-                }
-            } catch (error) {
-                console.error(`Error processing variable ${variableId}:`, error);
-            }
-        }
-
-        return variables;
-    }
-
     private convertVariable(
         variable: Variable,
-        collection: VariableCollection,
+        _collection: VariableCollection,
         modes: Mode[],
     ): WeWebVariable | null {
         const wewebId = this.generateUUID();
@@ -419,17 +271,17 @@ export class VariableExtractor {
         return modeMap[normalized] || normalized;
     }
 
-    private rgbaToHex(rgba: RGBA): string {
+    private rgbaToHex(color: RGB | RGBA): string {
         const toHex = (value: number) => {
             const hex = Math.round(value * 255).toString(16);
             return hex.length === 1 ? `0${hex}` : hex;
         };
 
-        const hex = `#${toHex(rgba.r)}${toHex(rgba.g)}${toHex(rgba.b)}`;
+        const hex = `#${toHex(color.r)}${toHex(color.g)}${toHex(color.b)}`;
 
         // Add alpha if not fully opaque
-        if (rgba.a !== undefined && rgba.a < 1) {
-            return hex + toHex(rgba.a);
+        if ('a' in color && color.a !== undefined && color.a < 1) {
+            return hex + toHex(color.a);
         }
 
         return hex;
@@ -663,9 +515,4 @@ interface Variable {
     resolvedType: 'COLOR' | 'FLOAT' | 'STRING' | 'BOOLEAN';
     valuesByMode: Record<string, any>;
     variableCollectionId: string;
-}
-
-interface VariableAlias {
-    type: 'VARIABLE_ALIAS';
-    id: string;
 }
