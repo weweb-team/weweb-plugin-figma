@@ -1,6 +1,8 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { useEventListener } from '@vueuse/core';
+import { ref } from 'vue';
 import { Button } from '@/components/ui/button';
+import { copyToClipboard } from '@/lib/clipboard';
 
 const selectedNode = ref<any>(null);
 const hasSelection = ref(false);
@@ -8,119 +10,70 @@ const copied = ref(false);
 const extractingVariables = ref(false);
 const variablesCopied = ref(false);
 
-// Robust clipboard function that works in Figma plugins
-async function copyToClipboard(text: string, isVariables: boolean = false) {
-    try {
-        // First try the modern Clipboard API
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-            await navigator.clipboard.writeText(text);
-            if (isVariables) {
-                variablesCopied.value = true;
-                setTimeout(() => {
-                    variablesCopied.value = false;
-                }, 2000);
-            } else {
-                copied.value = true;
-                setTimeout(() => {
-                    copied.value = false;
-                }, 2000);
-            }
-            return;
-        }
-    } catch {
-        console.log('Modern clipboard API failed, trying fallback...');
-    }
-
-    // Fallback to the textarea/execCommand method
-    try {
-        const prevActive = document.activeElement;
-        const textArea = document.createElement('textarea');
-        textArea.value = text;
-        textArea.style.position = 'fixed';
-        textArea.style.left = '-999999px';
-        textArea.style.top = '-999999px';
-        textArea.style.opacity = '0';
-        document.body.appendChild(textArea);
-        textArea.focus();
-        textArea.select();
-
-        const success = document.execCommand('copy');
-        textArea.remove();
-        if (prevActive && 'focus' in prevActive)
-            (prevActive as HTMLElement).focus();
-
-        if (success) {
-            if (isVariables) {
-                variablesCopied.value = true;
-                setTimeout(() => {
-                    variablesCopied.value = false;
-                }, 2000);
-            } else {
-                copied.value = true;
-                setTimeout(() => {
-                    copied.value = false;
-                }, 2000);
-            }
-        } else {
-            throw new Error('execCommand failed');
-        }
-    } catch (err) {
-        console.error('All clipboard methods failed:', err);
-        // Show an alert as last resort
-        alert('Copy failed. Please manually copy the code from the console or UI below.');
+// Helper function to handle clipboard copy with status updates
+async function handleCopyToClipboard(text: string, isVariables: boolean = false) {
+    await copyToClipboard(text);
+    if (isVariables) {
+        variablesCopied.value = true;
+        setTimeout(() => {
+            variablesCopied.value = false;
+        }, 2000);
+    } else {
+        copied.value = true;
+        setTimeout(() => {
+            copied.value = false;
+        }, 2000);
     }
 }
 
-onMounted(() => {
-    window.onmessage = (event) => {
-        const message = event.data.pluginMessage;
+useEventListener(window, 'message', (event) => {
+    const message = event.data.pluginMessage;
 
-        if (message.type === 'SELECTION_CHANGED') {
-            hasSelection.value = message.hasSelection;
-            selectedNode.value = message.selectedNode;
+    if (message.type === 'SELECTION_CHANGED') {
+        hasSelection.value = message.hasSelection;
+        selectedNode.value = message.selectedNode;
+    }
+
+    if (message.type === 'RAW_NODE_COPIED') {
+        console.log('Received RAW_NODE_COPIED message');
+        console.log('Raw Figma Node:', message.rawNode);
+
+        if (message.error) {
+            console.error('Error in raw node extraction:', message.error);
+            alert(`Error extracting node data: ${message.error}`);
+            return;
         }
 
-        if (message.type === 'RAW_NODE_COPIED') {
-            console.log('Received RAW_NODE_COPIED message');
-            console.log('Raw Figma Node:', message.rawNode);
+        if (message.rawNode) {
+            // Copy raw node data to clipboard
+            const rawNodeString = JSON.stringify(message.rawNode, null, 2);
+            console.log('Copying to clipboard, length:', rawNodeString.length);
+            handleCopyToClipboard(rawNodeString);
+        } else {
+            console.log('No raw node data received');
+        }
+    }
 
-            if (message.error) {
-                console.error('Error in raw node extraction:', message.error);
-                alert(`Error extracting node data: ${message.error}`);
-                return;
-            }
+    if (message.type === 'VARIABLES_EXTRACTED') {
+        extractingVariables.value = false;
+        console.log('Received VARIABLES_EXTRACTED message');
+        console.log('Variables:', message.variables);
 
-            if (message.rawNode) {
-                // Copy raw node data to clipboard
-                const rawNodeString = JSON.stringify(message.rawNode, null, 2);
-                console.log('Copying to clipboard, length:', rawNodeString.length);
-                copyToClipboard(rawNodeString);
-            } else {
-                console.log('No raw node data received');
-            }
+        if (message.error) {
+            console.error('Error extracting variables:', message.error);
+            alert(`Error extracting variables: ${message.error}`);
+            return;
         }
 
-        if (message.type === 'VARIABLES_EXTRACTED') {
-            extractingVariables.value = false;
-            console.log('Received VARIABLES_EXTRACTED message');
-            console.log('Variables:', message.variables);
-
-            if (message.error) {
-                console.error('Error extracting variables:', message.error);
-                alert(`Error extracting variables: ${message.error}`);
-                return;
-            }
-
-            if (message.variables) {
-                const variablesString = JSON.stringify(message.variables, null, 2);
-                console.log('Copying variables to clipboard, count:', message.variables.length);
-                copyToClipboard(variablesString, true);
-            } else {
-                console.log('No variables found');
-                alert('No variables found in this Figma file');
-            }
+        if (message.variables) {
+            const variablesString = JSON.stringify(message.variables, null, 2);
+            console.log('Copying variables to clipboard, count:', message.variables.length);
+            handleCopyToClipboard(variablesString, true);
+        } else {
+            console.log('No variables found');
+            alert('No variables found in this Figma file');
         }
-    };
+    }
 });
 
 function copyRawFigmaNode() {
