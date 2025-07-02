@@ -1,13 +1,36 @@
 // Figma Plugin - Copy Figma Nodes
+import { VariableExtractor } from './variable-extractor';
+
 export default function () {
-    figma.showUI(__html__, { 
-        width: 400, 
-        height: 300, 
+    figma.showUI(__html__, {
+        width: 400,
+        height: 400,
         themeColors: true,
-        title: "Copy Figma Nodes"
+        title: 'Figma to WeWeb',
     });
 
     figma.ui.onmessage = async (message) => {
+        if (message.type === 'EXTRACT_VARIABLES') {
+            console.log('Received EXTRACT_VARIABLES message');
+            try {
+                const extractor = new VariableExtractor();
+                const variables = await extractor.extractAllVariables();
+
+                console.log(`Extracted ${variables.length} variables`);
+                figma.ui.postMessage({
+                    type: 'VARIABLES_EXTRACTED',
+                    variables,
+                });
+            } catch (error) {
+                console.error('Error extracting variables:', error);
+                figma.ui.postMessage({
+                    type: 'VARIABLES_EXTRACTED',
+                    variables: null,
+                    error: error instanceof Error ? error.message : String(error),
+                });
+            }
+        }
+
         if (message.type === 'COPY_RAW_NODE') {
             console.log('Received COPY_RAW_NODE message');
             const selection = figma.currentPage.selection;
@@ -19,14 +42,14 @@ export default function () {
                     console.log('Raw node extracted successfully, posting message back');
                     figma.ui.postMessage({
                         type: 'RAW_NODE_COPIED',
-                        rawNode: rawNode,
+                        rawNode,
                     });
                 } catch (error) {
                     console.error('Error extracting raw node data:', error);
                     figma.ui.postMessage({
                         type: 'RAW_NODE_COPIED',
                         rawNode: null,
-                        error: error.message,
+                        error: error instanceof Error ? error.message : String(error),
                     });
                 }
             } else {
@@ -73,10 +96,14 @@ export default function () {
             }
 
             // Add constraints (primitive values only)
-            if ('maxWidth' in node && typeof node.maxWidth === 'number') rawData.maxWidth = node.maxWidth;
-            if ('maxHeight' in node && typeof node.maxHeight === 'number') rawData.maxHeight = node.maxHeight;
-            if ('minWidth' in node && typeof node.minWidth === 'number') rawData.minWidth = node.minWidth;
-            if ('minHeight' in node && typeof node.minHeight === 'number') rawData.minHeight = node.minHeight;
+            if ('maxWidth' in node && typeof node.maxWidth === 'number')
+                rawData.maxWidth = node.maxWidth;
+            if ('maxHeight' in node && typeof node.maxHeight === 'number')
+                rawData.maxHeight = node.maxHeight;
+            if ('minWidth' in node && typeof node.minWidth === 'number')
+                rawData.minWidth = node.minWidth;
+            if ('minHeight' in node && typeof node.minHeight === 'number')
+                rawData.minHeight = node.minHeight;
 
             // Add corner radius if available
             if ('cornerRadius' in node && typeof node.cornerRadius === 'number') {
@@ -115,7 +142,7 @@ export default function () {
 
             // Recursively extract children if they exist
             if ('children' in node && node.children && node.children.length > 0) {
-                rawData.children = node.children.map(child => extractRawNodeData(child));
+                rawData.children = node.children.map((child) => extractRawNodeData(child));
             }
 
             return rawData;
@@ -127,7 +154,7 @@ export default function () {
                 name: node.name,
                 type: node.type,
                 visible: node.visible,
-                error: 'Failed to extract full node data: ' + error.message
+                error: `Failed to extract full node data: ${error instanceof Error ? error.message : String(error)}`,
             };
         }
     }
@@ -142,10 +169,10 @@ export default function () {
             hasSelection: selection.length > 0,
             selectedNode: selection.length > 0
                 ? {
-                    id: selection[0].id,
-                    name: selection[0].name,
-                    type: selection[0].type,
-                }
+                        id: selection[0].id,
+                        name: selection[0].name,
+                        type: selection[0].type,
+                    }
                 : null,
         });
     }

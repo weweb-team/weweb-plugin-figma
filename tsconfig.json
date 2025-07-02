@@ -27,6 +27,7 @@
     "isolatedModules": true,
     "noUnusedParameters": true,
     "noUncheckedSideEffectImports": true,
+    "baseUrl": ".",
     "paths": {
       "@/*": [
         "./src/*"
