@@ -83,12 +83,19 @@ function extractVariables() {
                 class="w-full"
                 @click="extractVariables"
             >
-                <span v-if="extractingVariables">Extracting Variables...</span>
-                <span v-else>Extract All Variables</span>
+                <span v-if="extractingVariables" class="flex items-center justify-center gap-2">
+                    <span class="icon-[lucide--loader-2] size-4 animate-spin" />
+                    Extracting Variables...
+                </span>
+                <span v-else class="flex items-center justify-center gap-2">
+                    <span class="icon-[ph--magic-wand-bold] size-4" />
+                    Extract All Variables
+                </span>
             </Button>
 
-            <div v-if="variablesCopied" class="text-success text-sm mt-2">
-                ✓ Variables copied to clipboard!
+            <div v-if="variablesCopied" class="flex items-center justify-center gap-1.5 text-success text-sm mt-2">
+                <span class="icon-[lucide--check-circle] size-4" />
+                Variables copied to clipboard!
             </div>
         </div>
 
@@ -116,11 +123,23 @@ function extractVariables() {
             <h3 class="text-sm font-medium mb-2">
                 What this does:
             </h3>
-            <ul class="text-xs text-muted-foreground space-y-1">
-                <li>• Extracts all color, text, and effect styles</li>
-                <li>• Captures variable collections and modes</li>
-                <li>• Converts values to WeWeb-compatible format</li>
-                <li>• Copies JSON to your clipboard</li>
+            <ul class="text-xs text-muted-foreground space-y-1.5">
+                <li class="flex items-start gap-2">
+                    <span class="icon-[lucide--palette] size-3 mt-0.5 flex-shrink-0" />
+                    <span>Extracts all color, text, and effect styles</span>
+                </li>
+                <li class="flex items-start gap-2">
+                    <span class="icon-[lucide--layers] size-3 mt-0.5 flex-shrink-0" />
+                    <span>Captures variable collections and modes</span>
+                </li>
+                <li class="flex items-start gap-2">
+                    <span class="icon-[lucide--refresh-cw] size-3 mt-0.5 flex-shrink-0" />
+                    <span>Converts values to WeWeb-compatible format</span>
+                </li>
+                <li class="flex items-start gap-2">
+                    <span class="icon-[lucide--clipboard-check] size-3 mt-0.5 flex-shrink-0" />
+                    <span>Copies JSON to your clipboard</span>
+                </li>
             </ul>
         </div>
     </div>

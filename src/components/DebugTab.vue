@@ -71,7 +71,8 @@ function copyRawFigmaNode() {
     <div class="space-y-4">
         <!-- Debug Mode Toggle -->
         <div class="flex items-center justify-between p-3 bg-secondary/20 rounded-lg">
-            <label for="debug-mode" class="text-sm font-medium cursor-pointer">
+            <label for="debug-mode" class="flex items-center gap-2 text-sm font-medium cursor-pointer">
+                <span class="icon-[lucide--bug] size-4" />
                 Debug Mode
             </label>
             <Switch
@@ -101,11 +102,15 @@ function copyRawFigmaNode() {
             </div>
 
             <Button variant="brand" class="w-full" @click="copyRawFigmaNode">
-                Copy Raw Node Data
+                <span class="flex items-center justify-center gap-2">
+                    <span class="icon-[carbon--copy] size-4" />
+                    Copy Raw Node Data
+                </span>
             </Button>
 
-            <div v-if="copied" class="text-success text-sm text-center">
-                ✓ Node data copied to clipboard!
+            <div v-if="copied" class="flex items-center justify-center gap-1.5 text-success text-sm">
+                <span class="icon-[lucide--check-circle] size-4" />
+                Node data copied to clipboard!
             </div>
 
             <div class="mt-4 p-3 bg-secondary/50 rounded-lg">
