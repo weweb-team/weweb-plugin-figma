@@ -2,11 +2,15 @@
 import { useEventListener } from '@vueuse/core';
 import { ref } from 'vue';
 import { Button } from '@/components/ui/button';
+import { Switch } from '@/components/ui/switch';
+import { useDebugMode } from '@/composables/useDebugMode';
 import { copyToClipboard } from '@/lib/clipboard';
 
 const selectedNode = ref<any>(null);
 const hasSelection = ref(false);
 const copied = ref(false);
+
+const { debugMode } = useDebugMode();
 
 useEventListener(window, 'message', (event) => {
     const message = event.data.pluginMessage;
@@ -65,6 +69,16 @@ function copyRawFigmaNode() {
 
 <template>
     <div class="space-y-4">
+        <!-- Debug Mode Toggle -->
+        <div class="flex items-center justify-between p-3 bg-secondary/20 rounded-lg">
+            <label for="debug-mode" class="text-sm font-medium cursor-pointer">
+                Debug Mode
+            </label>
+            <Switch
+                id="debug-mode"
+                v-model="debugMode"
+            />
+        </div>
         <div v-if="!hasSelection" class="text-center">
             <div class="p-8 border-2 border-dashed border-border rounded-lg">
                 <p class="text-muted-foreground text-sm">

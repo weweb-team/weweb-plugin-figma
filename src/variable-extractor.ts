@@ -17,15 +17,26 @@ export class VariableExtractor {
     private variables: Map<string, WeWebVariable> = new Map();
     private figmaToWeWebIdMap: Map<string, string> = new Map();
     private processedVariableIds: Set<string> = new Set();
+    private progressCallback?: (message: string) => void;
+
+    constructor(progressCallback?: (message: string) => void) {
+        this.progressCallback = progressCallback;
+    }
+
+    private reportProgress(message: string) {
+        if (this.progressCallback) {
+            this.progressCallback(message);
+        }
+    }
 
     async extractAllVariables(): Promise<WeWebVariable[]> {
         try {
-            console.log('Starting variable extraction...');
+            this.reportProgress('Starting variable extraction...');
 
             // Step 1: Get all LOCAL variables directly (no scanning needed!)
-            console.log('Getting all local variables...');
+            this.reportProgress('Getting all local variables...');
             const localVariables = await figma.variables.getLocalVariablesAsync();
-            console.log(`Found ${localVariables.length} local variables`);
+            this.reportProgress(`Found ${localVariables.length} local variables`);
 
             // Process each local variable
             for (const variable of localVariables) {
@@ -41,10 +52,10 @@ export class VariableExtractor {
             }
 
             // Step 2: Get all LIBRARY variable collections
-            console.log('Getting library variable collections...');
+            this.reportProgress('Getting library variable collections...');
             try {
                 const libraryCollections = await figma.teamLibrary.getAvailableLibraryVariableCollectionsAsync();
-                console.log(`Found ${libraryCollections.length} library variable collections`);
+                this.reportProgress(`Found ${libraryCollections.length} library variable collections`);
 
                 // Create a concurrency limiter for collections
                 const collectionLimit = pLimit(3); // Process up to 3 collections concurrently
@@ -52,12 +63,12 @@ export class VariableExtractor {
                 // Process library collections concurrently
                 const collectionPromises = libraryCollections.map((libCollection) =>
                     collectionLimit(async () => {
-                        console.log(`Processing library collection: ${libCollection.name} from ${libCollection.libraryName}`);
+                        this.reportProgress(`Processing library collection: ${libCollection.name} from ${libCollection.libraryName}`);
 
                         try {
                             // Get variables in this library collection
                             const libraryVariables = await figma.teamLibrary.getVariablesInLibraryCollectionAsync(libCollection.key);
-                            console.log(`Found ${libraryVariables.length} variables in collection ${libCollection.name}`);
+                            this.reportProgress(`Found ${libraryVariables.length} variables in collection ${libCollection.name}`);
 
                             // Create a limiter for variables within this collection
                             const variableLimit = pLimit(5); // Process up to 5 variables concurrently
@@ -80,41 +91,41 @@ export class VariableExtractor {
                                             }
                                         }
                                     } catch (varErr: any) {
-                                        console.error(`Error importing variable ${libVariable.name}: ${varErr.message || varErr}`);
+                                        this.reportProgress(`⚠️ Error importing variable ${libVariable.name}: ${varErr.message || varErr}`);
                                     }
                                 }),
                             );
 
                             await Promise.all(variablePromises);
                         } catch (err: any) {
-                            console.error(`Error processing library collection ${libCollection.name}: ${err.message || err}`);
+                            this.reportProgress(`⚠️ Error processing library collection ${libCollection.name}: ${err.message || err}`);
                         }
                     }),
                 );
 
                 await Promise.all(collectionPromises);
-                console.log('Finished processing library collections');
+                this.reportProgress('Finished processing library collections');
             } catch (err) {
-                console.error('Error getting library collections:', err);
-                console.log('This might be because no libraries are enabled for this file');
+                this.reportProgress(`⚠️ Error getting library collections: ${err}`);
+                this.reportProgress('This might be because no libraries are enabled for this file');
             }
 
             // Step 3: Extract color styles if no color variables found
             const hasColorVariables = Array.from(this.variables.values()).some((v) => v.type === 'color');
             if (!hasColorVariables) {
-                console.log('No color variables found, extracting color styles...');
+                this.reportProgress('No color variables found, extracting color styles...');
                 await this.extractColorStyles();
             }
 
             // Step 4: Resolve variable aliases (variables that reference other variables)
-            console.log('Resolving variable aliases...');
+            this.reportProgress('Resolving variable aliases...');
             await this.resolveVariableAliases();
 
             const result = Array.from(this.variables.values());
-            console.log(`Extracted ${result.length} variables total`);
+            this.reportProgress(`✅ Extracted ${result.length} variables total`);
             return result;
         } catch (error) {
-            console.error('Error extracting variables:', error);
+            this.reportProgress(`⚠️ Error extracting variables: ${error}`);
             throw error;
         }
     }
@@ -127,7 +138,7 @@ export class VariableExtractor {
         const wewebId = this.generateUUID();
         const values: Record<string, any> = {};
 
-        console.log(`Converting variable: ${variable.name} (${variable.resolvedType})`);
+        this.reportProgress(`Converting variable: ${variable.name} (${variable.resolvedType})`);
 
         // Extract values for each mode
         for (const mode of modes) {
@@ -136,7 +147,7 @@ export class VariableExtractor {
 
             // Check if value is a variable alias (reference to another variable)
             if (value && typeof value === 'object' && 'type' in value && value.type === 'VARIABLE_ALIAS') {
-                console.log(`Variable ${variable.name} references another variable: ${value.id}`);
+                this.reportProgress(`Variable ${variable.name} references another variable: ${value.id}`);
                 // For now, store the reference - we'll resolve these in a second pass
                 values[themeName] = value;
                 continue;
@@ -300,10 +311,10 @@ export class VariableExtractor {
         try {
             // Get all local paint styles
             const localStyles = await figma.getLocalPaintStylesAsync();
-            console.log(`Found ${localStyles.length} local paint styles`);
+            this.reportProgress(`Found ${localStyles.length} local paint styles`);
 
             for (const style of localStyles) {
-                console.log(`Processing paint style: ${style.name}`);
+                this.reportProgress(`Processing paint style: ${style.name}`);
 
                 // Check if style has paints
                 if (style.paints && style.paints.length > 0) {
@@ -324,13 +335,13 @@ export class VariableExtractor {
                         };
 
                         this.variables.set(wewebId, styleVariable);
-                        console.log(`Added color style as variable: ${style.name}`);
+                        this.reportProgress(`Added color style as variable: ${style.name}`);
                     }
                 }
             }
 
             // Also scan for remote styles being used
-            console.log('Scanning for remote color styles in use...');
+            this.reportProgress('Scanning for remote color styles in use...');
             const usedStyleIds = new Set<string>();
 
             // Function to collect style IDs from a node
@@ -353,7 +364,7 @@ export class VariableExtractor {
                 await collectStyleIds(page);
             }
 
-            console.log(`Found ${usedStyleIds.size} unique style IDs in use`);
+            this.reportProgress(`Found ${usedStyleIds.size} unique style IDs in use`);
 
             // Create a concurrency limiter
             const limit = pLimit(5); // Process up to 5 styles concurrently
@@ -364,7 +375,7 @@ export class VariableExtractor {
                     try {
                         const style = await figma.getStyleByIdAsync(styleId);
                         if (style && style.type === 'PAINT' && !this.processedVariableIds.has(styleId)) {
-                            console.log(`Processing remote style: ${style.name}`);
+                            this.reportProgress(`Processing remote style: ${style.name}`);
                             this.processedVariableIds.add(styleId);
 
                             try {
@@ -387,29 +398,29 @@ export class VariableExtractor {
                                         };
 
                                         this.variables.set(wewebId, styleVariable);
-                                        console.log(`Added library color style as variable: ${style.name}`);
+                                        this.reportProgress(`Added library color style as variable: ${style.name}`);
                                     }
                                 }
                             } catch (importErr: any) {
                                 // Handle 404 errors gracefully
                                 if (importErr.message?.includes('404') || importErr.message?.includes('Not found')) {
-                                    console.log(`Style ${style.name} not accessible (404) - likely unpublished or requires Professional Team`);
+                                    this.reportProgress(`⚠️ Style ${style.name} not accessible (404) - likely unpublished or requires Professional Team`);
                                 } else {
-                                    console.log(`Could not import style ${style.name}: ${importErr.message || importErr}`);
+                                    this.reportProgress(`⚠️ Could not import style ${style.name}: ${importErr.message || importErr}`);
                                 }
                             }
                         }
                     } catch (err: any) {
-                        console.log(`Could not fetch style ${styleId}: ${err.message || err}`);
+                        this.reportProgress(`⚠️ Could not fetch style ${styleId}: ${err.message || err}`);
                     }
                 }),
             );
 
             // Wait for all style processing to complete
             await Promise.all(styleProcessingPromises);
-            console.log('Finished processing remote styles');
+            this.reportProgress('Finished processing remote styles');
         } catch (error) {
-            console.error('Error extracting color styles:', error);
+            this.reportProgress(`⚠️ Error extracting color styles: ${error}`);
         }
     }
 
@@ -434,7 +445,7 @@ export class VariableExtractor {
                         if (referencedVar) {
                             // Replace the alias with the actual value
                             variable.values[theme] = referencedVar;
-                            console.log(`Resolved alias for ${variable.name}[${theme}] to: ${referencedVar}`);
+                            this.reportProgress(`Resolved alias for ${variable.name}[${theme}] to: ${referencedVar}`);
                         } else {
                             console.warn(`Could not resolve alias ${value.id} for ${variable.name}[${theme}]`);
                         }
@@ -481,7 +492,7 @@ export class VariableExtractor {
                 return firstModeValue;
             }
         } catch (error) {
-            console.error(`Error resolving variable ${variableId}:`, error);
+            this.reportProgress(`⚠️ Error resolving variable ${variableId}: ${error}`);
         }
 
         return null;

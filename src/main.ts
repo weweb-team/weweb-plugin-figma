@@ -16,7 +16,14 @@ export default function () {
 
         if (message.type === 'EXTRACT_VARIABLES') {
             try {
-                const extractor = new VariableExtractor();
+                // Create extractor with progress callback
+                const extractor = new VariableExtractor((progressMessage: string) => {
+                    figma.ui.postMessage({
+                        type: 'EXTRACTION_PROGRESS',
+                        message: progressMessage,
+                    });
+                });
+
                 const variables = await extractor.extractAllVariables();
 
                 figma.ui.postMessage({
