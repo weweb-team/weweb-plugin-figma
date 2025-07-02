@@ -42,13 +42,16 @@
   },
   "plugma": {
     "manifest": {
-      "id": "copy-figma-nodes",
-      "name": "Copy Figma Nodes",
+      "id": "weweb-figma-plugin",
+      "name": "WeWeb Figma Plugin",
       "main": "src/main.ts",
       "ui": "src/ui.ts",
       "editorType": [
         "figma",
         "figjam"
+      ],
+      "permissions": [
+        "teamlibrary"
       ],
       "networkAccess": {
         "allowedDomains": [

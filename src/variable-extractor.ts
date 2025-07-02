@@ -19,6 +19,15 @@ export class VariableExtractor {
     private processedVariableIds: Set<string> = new Set();
     private progressCallback?: (message: string) => void;
 
+    // Tracking counters
+    private colorFromVariables = 0;
+    private colorFromLocalStyles = 0;
+    private colorFromRemoteStyles = 0;
+
+    // Error tracking
+    private variableImportErrors = 0;
+    private styleImportErrors = 0;
+
     constructor(progressCallback?: (message: string) => void) {
         this.progressCallback = progressCallback;
     }
@@ -39,6 +48,7 @@ export class VariableExtractor {
             this.reportProgress(`Found ${localVariables.length} local variables`);
 
             // Process each local variable
+            let localVariableCount = 0;
             for (const variable of localVariables) {
                 // Get the variable's collection to access modes
                 const collection = await figma.variables.getVariableCollectionByIdAsync(variable.variableCollectionId);
@@ -47,9 +57,14 @@ export class VariableExtractor {
                     if (wewebVariable) {
                         this.variables.set(wewebVariable.id, wewebVariable);
                         this.figmaToWeWebIdMap.set(variable.id, wewebVariable.id);
+                        localVariableCount++;
+                        if (wewebVariable.type === 'color') {
+                            this.colorFromVariables++;
+                        }
                     }
                 }
             }
+            this.reportProgress(`✅ Extracted ${localVariableCount} local variables`);
 
             // Step 2: Get all LIBRARY variable collections
             this.reportProgress('Getting library variable collections...');
@@ -87,11 +102,15 @@ export class VariableExtractor {
                                                 if (wewebVariable) {
                                                     this.variables.set(wewebVariable.id, wewebVariable);
                                                     this.figmaToWeWebIdMap.set(importedVariable.id, wewebVariable.id);
+                                                    if (wewebVariable.type === 'color') {
+                                                        this.colorFromVariables++;
+                                                    }
                                                 }
                                             }
                                         }
                                     } catch (varErr: any) {
                                         this.reportProgress(`⚠️ Error importing variable ${libVariable.name}: ${varErr.message || varErr}`);
+                                        this.variableImportErrors++;
                                     }
                                 }),
                             );
@@ -104,6 +123,8 @@ export class VariableExtractor {
                 );
 
                 await Promise.all(collectionPromises);
+                const libraryVariableCount = this.variables.size - localVariableCount;
+                this.reportProgress(`✅ Extracted ${libraryVariableCount} library variables`);
                 this.reportProgress('Finished processing library collections');
             } catch (err) {
                 this.reportProgress(`⚠️ Error getting library collections: ${err}`);
@@ -112,17 +133,62 @@ export class VariableExtractor {
 
             // Step 3: Extract color styles if no color variables found
             const hasColorVariables = Array.from(this.variables.values()).some((v) => v.type === 'color');
+            const variableCountBeforeStyles = this.variables.size;
             if (!hasColorVariables) {
                 this.reportProgress('No color variables found, extracting color styles...');
                 await this.extractColorStyles();
+                const colorStyleCount = this.variables.size - variableCountBeforeStyles;
+                this.reportProgress(`✅ Extracted ${colorStyleCount} color styles`);
             }
 
-            // Step 4: Resolve variable aliases (variables that reference other variables)
+            // Step 4: Extract text styles
+            const variableCountBeforeTextStyles = this.variables.size;
+            this.reportProgress('Extracting text styles...');
+            await this.extractTextStyles();
+            const textStyleCount = this.variables.size - variableCountBeforeTextStyles;
+            this.reportProgress(`✅ Extracted ${textStyleCount} text styles`);
+
+            // Step 5: Resolve variable aliases (variables that reference other variables)
             this.reportProgress('Resolving variable aliases...');
             await this.resolveVariableAliases();
 
             const result = Array.from(this.variables.values());
-            this.reportProgress(`✅ Extracted ${result.length} variables total`);
+
+            // Breakdown by type
+            const breakdown: Record<string, number> = {};
+            for (const variable of result) {
+                breakdown[variable.type] = (breakdown[variable.type] || 0) + 1;
+            }
+
+            this.reportProgress('=== EXTRACTION SUMMARY ===');
+            this.reportProgress(`Total variables: ${result.length}`);
+
+            // Detailed color breakdown
+            this.reportProgress(`\nColor variables (${breakdown.color || 0} total):`);
+            this.reportProgress(`  - From Figma Variables API: ${this.colorFromVariables}`);
+            this.reportProgress(`  - From Local Paint Styles: ${this.colorFromLocalStyles}`);
+            this.reportProgress(`  - From Remote Paint Styles (via scan): ${this.colorFromRemoteStyles}`);
+
+            this.reportProgress(`\nAll types:`);
+            for (const [type, count] of Object.entries(breakdown)) {
+                this.reportProgress(`  - ${type}: ${count}`);
+            }
+
+            // Error summary
+            const totalErrors = this.variableImportErrors + this.styleImportErrors;
+            if (totalErrors > 0) {
+                this.reportProgress(`\nErrors encountered:`);
+                if (this.variableImportErrors > 0) {
+                    this.reportProgress(`  - Variable import errors: ${this.variableImportErrors}`);
+                }
+                if (this.styleImportErrors > 0) {
+                    this.reportProgress(`  - Style import errors: ${this.styleImportErrors}`);
+                }
+                this.reportProgress(`  - Total errors: ${totalErrors}`);
+            }
+
+            this.reportProgress('========================');
+
             return result;
         } catch (error) {
             this.reportProgress(`⚠️ Error extracting variables: ${error}`);
@@ -138,6 +204,7 @@ export class VariableExtractor {
         const wewebId = this.generateUUID();
         const values: Record<string, any> = {};
 
+        // Log variable details for debugging
         this.reportProgress(`Converting variable: ${variable.name} (${variable.resolvedType})`);
 
         // Extract values for each mode
@@ -313,6 +380,7 @@ export class VariableExtractor {
             const localStyles = await figma.getLocalPaintStylesAsync();
             this.reportProgress(`Found ${localStyles.length} local paint styles`);
 
+            let localColorStyleCount = 0;
             for (const style of localStyles) {
                 this.reportProgress(`Processing paint style: ${style.name}`);
 
@@ -336,22 +404,42 @@ export class VariableExtractor {
 
                         this.variables.set(wewebId, styleVariable);
                         this.reportProgress(`Added color style as variable: ${style.name}`);
+                        localColorStyleCount++;
+                        this.colorFromLocalStyles++;
                     }
                 }
             }
+            this.reportProgress(`Found ${localColorStyleCount} local color styles`);
 
-            // Also scan for remote styles being used
+            // STEP 2: SCAN FOR REMOTE/LIBRARY STYLES
+            // This is needed because Figma doesn't provide an API to list all library paint styles
+            // We have to scan the entire document to find what styles are actually being used
             this.reportProgress('Scanning for remote color styles in use...');
             const usedStyleIds = new Set<string>();
 
-            // Function to collect style IDs from a node
+            // Recursive function to scan every single node in the document
             const collectStyleIds = async (node: BaseNode) => {
+                // Check if this node has a fill style applied
+                // fillStyleId exists when a color style is applied to the fill
                 if ('fillStyleId' in node && node.fillStyleId && typeof node.fillStyleId === 'string') {
                     usedStyleIds.add(node.fillStyleId);
+                    // Example: A rectangle with "Brand/Primary Blue" fill style
                 }
+
+                // Check if this node has a stroke style applied
+                // strokeStyleId exists when a color style is applied to the stroke/border
                 if ('strokeStyleId' in node && node.strokeStyleId && typeof node.strokeStyleId === 'string') {
                     usedStyleIds.add(node.strokeStyleId);
+                    // Example: A button with "Border/Default" stroke style
                 }
+
+                // IMPORTANT: We're NOT collecting:
+                // - effectStyleId (shadow/blur styles)
+                // - textStyleId (typography styles) - handled separately
+                // - gridStyleId (layout grid styles)
+                // - Direct color fills (non-styled colors like #FF0000)
+
+                // Recursively scan all children nodes
                 if ('children' in node && node.children) {
                     for (const child of node.children) {
                         await collectStyleIds(child);
@@ -359,12 +447,23 @@ export class VariableExtractor {
                 }
             };
 
-            // Collect all used style IDs
+            // Scan EVERY page in the document
+            // figma.root.children contains all pages (Page1, Page2, etc.)
             for (const page of figma.root.children) {
                 await collectStyleIds(page);
+                // This will scan every frame, group, component, text, etc. on each page
             }
 
             this.reportProgress(`Found ${usedStyleIds.size} unique style IDs in use`);
+
+            // Track error types
+            let notFoundErrors = 0;
+            let accessErrors = 0;
+            let otherErrors = 0;
+            let successCount = 0;
+            let paintStylesChecked = 0;
+            let localStylesFound = 0;
+            let remoteStylesFound = 0;
 
             // Create a concurrency limiter
             const limit = pLimit(5); // Process up to 5 styles concurrently
@@ -375,10 +474,30 @@ export class VariableExtractor {
                     try {
                         const style = await figma.getStyleByIdAsync(styleId);
                         if (style && style.type === 'PAINT' && !this.processedVariableIds.has(styleId)) {
-                            this.reportProgress(`Processing remote style: ${style.name}`);
+                            paintStylesChecked++;
+
+                            // Check if it's actually remote
+                            if (!style.remote) {
+                                localStylesFound++;
+                                // Skip local styles - we already processed them
+                                return;
+                            }
+
+                            remoteStylesFound++;
+
+                            // Only log first few to avoid spam
+                            if (remoteStylesFound <= 3) {
+                                this.reportProgress(`Processing remote style: ${style.name} (key: ${style.key})`);
+                            }
                             this.processedVariableIds.add(styleId);
 
                             try {
+                                // Debug: Log the style details
+                                if (paintStylesChecked <= 3) {
+                                    this.reportProgress(`  Style details: id=${style.id}, name="${style.name}", key="${style.key}"`);
+                                    this.reportProgress(`  Style type: ${style.type}, remote: ${style.remote}`);
+                                }
+
                                 // Get the style's paints
                                 const paintStyle = await figma.importStyleByKeyAsync(style.key);
                                 if (paintStyle && 'paints' in paintStyle && paintStyle.paints.length > 0) {
@@ -398,26 +517,60 @@ export class VariableExtractor {
                                         };
 
                                         this.variables.set(wewebId, styleVariable);
-                                        this.reportProgress(`Added library color style as variable: ${style.name}`);
+                                        if (successCount < 3) {
+                                            this.reportProgress(`✅ Successfully imported library style: ${style.name}`);
+                                        }
+                                        this.colorFromRemoteStyles++;
+                                        successCount++;
                                     }
                                 }
                             } catch (importErr: any) {
                                 // Handle 404 errors gracefully
                                 if (importErr.message?.includes('404') || importErr.message?.includes('Not found')) {
-                                    this.reportProgress(`⚠️ Style ${style.name} not accessible (404) - likely unpublished or requires Professional Team`);
+                                    notFoundErrors++;
+                                    if (notFoundErrors <= 3) {
+                                        this.reportProgress(`⚠️ Style "${style.name}" not found (404) - key: ${style.key}`);
+                                    }
+                                } else if (importErr.message?.includes('access') || importErr.message?.includes('permission')) {
+                                    accessErrors++;
+                                    if (accessErrors <= 3) {
+                                        this.reportProgress(`⚠️ No access to style "${style.name}": ${importErr.message}`);
+                                    }
                                 } else {
-                                    this.reportProgress(`⚠️ Could not import style ${style.name}: ${importErr.message || importErr}`);
+                                    otherErrors++;
+                                    if (otherErrors <= 3) {
+                                        this.reportProgress(`⚠️ Could not import style "${style.name}": ${importErr.message || importErr}`);
+                                    }
                                 }
+                                this.styleImportErrors++;
                             }
                         }
                     } catch (err: any) {
                         this.reportProgress(`⚠️ Could not fetch style ${styleId}: ${err.message || err}`);
+                        this.styleImportErrors++;
                     }
                 }),
             );
 
             // Wait for all style processing to complete
             await Promise.all(styleProcessingPromises);
+
+            this.reportProgress(`\nRemote style scan results:`);
+            this.reportProgress(`  - Total style IDs found in scan: ${usedStyleIds.size}`);
+            this.reportProgress(`  - Local styles in scan (skipped): ${localStylesFound}`);
+            this.reportProgress(`  - Remote styles in scan: ${remoteStylesFound}`);
+            this.reportProgress(`  - Successfully imported: ${successCount}`);
+            this.reportProgress(`  - 404 Not Found errors: ${notFoundErrors}`);
+            this.reportProgress(`  - Access/Permission errors: ${accessErrors}`);
+            this.reportProgress(`  - Other errors: ${otherErrors}`);
+
+            if (otherErrors > 100) {
+                this.reportProgress(`\n⚠️ High number of import errors! Possible causes:`);
+                this.reportProgress(`  - Plugin needs to be reloaded after adding permissions`);
+                this.reportProgress(`  - Libraries require re-enabling in this file`);
+                this.reportProgress(`  - Figma API key issue with importStyleByKeyAsync`);
+            }
+
             this.reportProgress('Finished processing remote styles');
         } catch (error) {
             this.reportProgress(`⚠️ Error extracting color styles: ${error}`);
@@ -497,6 +650,109 @@ export class VariableExtractor {
 
         return null;
     }
+
+    private async extractTextStyles(): Promise<void> {
+        try {
+            // Extract local text styles
+            const localTextStyles = figma.getLocalTextStyles();
+            this.reportProgress(`Found ${localTextStyles.length} local text styles`);
+
+            let textStyleCount = 0;
+            for (const style of localTextStyles) {
+                this.reportProgress(`Processing text style: ${style.name}`);
+
+                const wewebId = `text-style-${style.id}`;
+
+                // Get the text style properties
+                const fontSize = style.fontSize;
+                const fontName = style.fontName;
+                const letterSpacing = style.letterSpacing;
+                const lineHeight = style.lineHeight;
+                const textDecoration = style.textDecoration;
+
+                const typographyValue = {
+                    fontFamily: fontName.family,
+                    fontWeight: this.mapFontWeight(fontName.style),
+                    fontSize: typeof fontSize === 'number' ? `${fontSize}px` : fontSize,
+                    lineHeight: this.formatLineHeight(lineHeight),
+                    letterSpacing: this.formatLetterSpacing(letterSpacing),
+                    textDecoration: textDecoration === 'NONE' ? undefined : textDecoration?.toLowerCase(),
+                };
+
+                const wewebVariable: WeWebVariable = {
+                    id: wewebId,
+                    name: this.sanitizeVariableName(style.name),
+                    type: 'typography',
+                    category: this.extractCategory(style.name),
+                    values: {
+                        default: typographyValue,
+                    },
+                    figmaId: style.id,
+                    description: style.description || undefined,
+                };
+
+                this.variables.set(wewebId, wewebVariable);
+                this.reportProgress(`Added text style as variable: ${style.name}`);
+                textStyleCount++;
+            }
+            this.reportProgress(`Total text styles extracted: ${textStyleCount}`);
+
+            this.reportProgress('Finished extracting text styles');
+        } catch (error) {
+            this.reportProgress(`⚠️ Error extracting text styles: ${error}`);
+        }
+    }
+
+    private mapFontWeight(fontStyle: string): number {
+        const styleMap: Record<string, number> = {
+            Thin: 100,
+            ExtraLight: 200,
+            Light: 300,
+            Regular: 400,
+            Medium: 500,
+            SemiBold: 600,
+            Semibold: 600,
+            Bold: 700,
+            ExtraBold: 800,
+            Black: 900,
+        };
+
+        // Check for exact matches first
+        if (styleMap[fontStyle]) {
+            return styleMap[fontStyle];
+        }
+
+        // Check if style contains weight keywords
+        const lowerStyle = fontStyle.toLowerCase();
+        for (const [key, value] of Object.entries(styleMap)) {
+            if (lowerStyle.includes(key.toLowerCase())) {
+                return value;
+            }
+        }
+
+        // Default to regular
+        return 400;
+    }
+
+    private formatLineHeight(lineHeight: LineHeight): string | undefined {
+        if (lineHeight.unit === 'AUTO') {
+            return 'normal';
+        } else if (lineHeight.unit === 'PIXELS') {
+            return `${lineHeight.value}px`;
+        } else if (lineHeight.unit === 'PERCENT') {
+            return `${lineHeight.value}%`;
+        }
+        return undefined;
+    }
+
+    private formatLetterSpacing(letterSpacing: LetterSpacing): string | undefined {
+        if (letterSpacing.unit === 'PIXELS') {
+            return `${letterSpacing.value}px`;
+        } else if (letterSpacing.unit === 'PERCENT') {
+            return `${letterSpacing.value / 100}em`;
+        }
+        return undefined;
+    }
 }
 
 // Type definitions for Figma API
@@ -526,4 +782,13 @@ interface Variable {
     resolvedType: 'COLOR' | 'FLOAT' | 'STRING' | 'BOOLEAN';
     valuesByMode: Record<string, any>;
     variableCollectionId: string;
+}
+
+type LineHeight
+    = | { readonly value: number; readonly unit: 'PIXELS' | 'PERCENT' }
+        | { readonly unit: 'AUTO' };
+
+interface LetterSpacing {
+    readonly value: number;
+    readonly unit: 'PIXELS' | 'PERCENT';
 }
