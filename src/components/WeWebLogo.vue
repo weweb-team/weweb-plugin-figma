@@ -4,12 +4,6 @@ import LogoDark from '@/assets/img/logo_dark.svg?raw';
 import LogoLight from '@/assets/img/logo_light.svg?raw';
 import { useDarkMode } from '@/composables/useDarkMode';
 
-interface Props {
-    class?: string;
-}
-
-defineProps<Props>();
-
 const { isDark } = useDarkMode();
 
 const logoSvg = computed(() => {
@@ -18,5 +12,5 @@ const logoSvg = computed(() => {
 </script>
 
 <template>
-    <div :class="$props.class" v-html="logoSvg" />
+    <div class="flex items-center justify-center" v-html="logoSvg" />
 </template>

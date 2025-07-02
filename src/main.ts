@@ -10,19 +10,20 @@ export default function () {
     });
 
     figma.ui.onmessage = async (message) => {
+        if (message.type === 'GET_SELECTION') {
+            postSelection();
+        }
+
         if (message.type === 'EXTRACT_VARIABLES') {
-            console.log('Received EXTRACT_VARIABLES message');
             try {
                 const extractor = new VariableExtractor();
                 const variables = await extractor.extractAllVariables();
 
-                console.log(`Extracted ${variables.length} variables`);
                 figma.ui.postMessage({
                     type: 'VARIABLES_EXTRACTED',
                     variables,
                 });
             } catch (error) {
-                console.error('Error extracting variables:', error);
                 figma.ui.postMessage({
                     type: 'VARIABLES_EXTRACTED',
                     variables: null,
