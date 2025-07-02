@@ -2,6 +2,7 @@
 import { useEventListener } from '@vueuse/core';
 import { ref } from 'vue';
 import { Button } from '@/components/ui/button';
+import { useFigmaTheme } from '@/composables/useFigmaTheme';
 import { copyToClipboard } from '@/lib/clipboard';
 
 const selectedNode = ref<any>(null);
@@ -95,10 +96,13 @@ function extractVariables() {
         pluginMessage: { type: 'EXTRACT_VARIABLES' },
     }, '*');
 }
+
+// Apply Figma theme
+useFigmaTheme();
 </script>
 
 <template>
-    <div class="p-4 space-y-4">
+    <div class="min-h-screen bg-background text-foreground p-4 space-y-4">
         <div class="text-center">
             <h1 class="text-lg font-semibold mb-4">
                 Figma to WeWeb
@@ -116,25 +120,25 @@ function extractVariables() {
                     <span v-else>Extract All Variables</span>
                 </Button>
 
-                <div v-if="variablesCopied" class="text-green-600 text-sm mt-2">
+                <div v-if="variablesCopied" class="text-success text-sm mt-2">
                     ✓ Variables copied to clipboard!
                 </div>
             </div>
 
-            <div class="border-t pt-4">
-                <div v-if="!hasSelection" class="text-gray-500 text-sm">
+            <div class="border-t border-border pt-4">
+                <div v-if="!hasSelection" class="text-muted-foreground text-sm">
                     Please select a layer in Figma to copy nodes
                 </div>
 
                 <div v-else class="space-y-4">
-                    <div class="p-3 bg-blue-50 rounded-lg">
+                    <div class="p-3 bg-muted rounded-lg">
                         <p class="text-sm font-medium">
                             Selected Layer:
                         </p>
-                        <p class="text-xs text-gray-600">
+                        <p class="text-xs text-foreground">
                             {{ selectedNode?.name }}
                         </p>
-                        <p class="text-xs text-gray-500">
+                        <p class="text-xs text-muted-foreground">
                             {{ selectedNode?.type }}
                         </p>
                     </div>
@@ -145,7 +149,7 @@ function extractVariables() {
                         </Button>
                     </div>
 
-                    <div v-if="copied" class="text-green-600 text-sm">
+                    <div v-if="copied" class="text-success text-sm">
                         ✓ Figma node copied to clipboard!
                     </div>
                 </div>

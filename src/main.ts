@@ -4,9 +4,9 @@ import { VariableExtractor } from './variable-extractor';
 export default function () {
     figma.showUI(__html__, {
         width: 400,
-        height: 400,
+        height: 600,
         themeColors: true,
-        title: 'Figma to WeWeb',
+        title: 'WeWeb Figma Plugin',
     });
 
     figma.ui.onmessage = async (message) => {
