@@ -18,7 +18,7 @@ const forwardedProps = useForwardProps(delegatedProps);
 <template>
     <TabsList
         :class="cn(
-            'inline-flex h-9 items-center justify-center rounded-lg bg-muted p-1 text-muted-foreground',
+            'inline-flex items-center justify-center rounded-lg bg-secondary border border-border p-1 text-tertiary font-medium text-xs min-h-[28px]',
             props.class,
         )"
         v-bind="forwardedProps"

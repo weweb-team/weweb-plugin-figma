@@ -23,20 +23,22 @@ const activeTab = ref('design-system');
         <!-- Tabs Container -->
         <div class="flex-1 p-4">
             <Tabs v-model="activeTab" class="w-full">
-                <TabsList class="grid w-full grid-cols-2">
+                <TabsList class="grid w-full grid-cols-2 mb-4">
                     <TabsTrigger value="design-system">
+                        <span class="icon-[ph--palette-bold] size-4 mr-2" />
                         Design System
                     </TabsTrigger>
                     <TabsTrigger value="debug">
+                        <span class="icon-[lucide--bug] size-4 mr-2" />
                         Debug
                     </TabsTrigger>
                 </TabsList>
 
-                <TabsContent value="design-system" class="mt-4">
+                <TabsContent value="design-system">
                     <DesignSystemTab />
                 </TabsContent>
 
-                <TabsContent value="debug" class="mt-4">
+                <TabsContent value="debug">
                     <DebugTab />
                 </TabsContent>
             </Tabs>
