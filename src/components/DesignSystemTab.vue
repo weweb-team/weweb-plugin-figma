@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { PluginMessage } from '@/types/messages';
 import { useEventListener } from '@vueuse/core';
 import { ref } from 'vue';
 import { Button } from '@/components/ui/button';
@@ -12,12 +13,13 @@ const fullProgressLogs = ref<string[]>([]); // Keep complete history
 const showProgress = ref(false);
 const extractionComplete = ref(false);
 const extractedCount = ref(0);
+const extractedFontCount = ref(0);
 const logsCopied = ref(false);
 
 const { debugMode } = useDebugMode();
 
 useEventListener(window, 'message', (event) => {
-    const message = event.data.pluginMessage;
+    const message = event.data.pluginMessage as PluginMessage;
 
     if (message.type === 'EXTRACTION_PROGRESS') {
         // Keep full history
@@ -51,14 +53,24 @@ useEventListener(window, 'message', (event) => {
         }
 
         if (message.variables) {
-            const variablesString = JSON.stringify(message.variables, null, 2);
-            handleCopyToClipboard(variablesString);
+            // Create complete extraction result with both variables and fonts
+            const extractionResult = {
+                variables: message.variables,
+                fonts: message.fonts || [],
+            };
+
+            const extractionString = JSON.stringify(extractionResult, null, 2);
+            handleCopyToClipboard(extractionString);
+
             // Add success message to progress logs
-            const successMsg = `✅ Successfully extracted ${message.variables.length} variables!`;
+            const variableCount = message.variables.length;
+            const fontCount = message.fonts ? message.fonts.length : 0;
+            const successMsg = `✅ Successfully extracted ${variableCount} variables and ${fontCount} fonts!`;
             progressLogs.value.push(successMsg);
             fullProgressLogs.value.push(successMsg);
             extractionComplete.value = true;
-            extractedCount.value = message.variables.length;
+            extractedCount.value = variableCount;
+            extractedFontCount.value = fontCount;
         } else {
             const noVarsMsg = '⚠️ No variables found in this Figma file';
             progressLogs.value.push(noVarsMsg);
@@ -81,6 +93,7 @@ function extractVariables() {
     showProgress.value = true;
     extractionComplete.value = false;
     extractedCount.value = 0;
+    extractedFontCount.value = 0;
     progressLogs.value = []; // Clear previous logs
     fullProgressLogs.value = []; // Clear full history
     parent.postMessage({
@@ -128,7 +141,7 @@ async function copyLogs() {
 
             <div v-if="variablesCopied" class="flex items-center justify-center gap-1.5 text-success text-sm mt-2">
                 <span class="icon-[lucide--check-circle] size-4" />
-                Variables copied to clipboard!
+                Variables and fonts copied to clipboard!
             </div>
         </div>
 
@@ -141,7 +154,7 @@ async function copyLogs() {
                         Extraction Complete!
                     </p>
                     <p class="text-xs text-muted-foreground mt-1">
-                        Successfully extracted {{ extractedCount }} variables and copied to your clipboard.
+                        Successfully extracted {{ extractedCount }} variables and {{ extractedFontCount }} fonts, copied to your clipboard.
                     </p>
                 </div>
             </div>

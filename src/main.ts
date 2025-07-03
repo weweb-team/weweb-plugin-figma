@@ -24,11 +24,12 @@ export default function () {
                     });
                 });
 
-                const variables = await extractor.extractAllVariables();
+                const result = await extractor.extractAllVariables();
 
                 figma.ui.postMessage({
                     type: 'VARIABLES_EXTRACTED',
-                    variables,
+                    variables: result.variables,
+                    fonts: result.fonts,
                 });
             } catch (error) {
                 figma.ui.postMessage({

@@ -1,6 +1,94 @@
 // Variable extraction functionality for Figma tokens
 import pLimit from 'p-limit';
 
+// Google Fonts database - top 100 most popular fonts
+const GOOGLE_FONTS = new Set([
+    'Roboto',
+    'Open Sans',
+    'Lato',
+    'Montserrat',
+    'Oswald',
+    'Raleway',
+    'Poppins',
+    'Source Sans Pro',
+    'Nunito',
+    'Merriweather',
+    'Ubuntu',
+    'Playfair Display',
+    'Fira Sans',
+    'Oxygen',
+    'Noto Sans',
+    'Inter',
+    'Crimson Text',
+    'Libre Franklin',
+    'Libre Baskerville',
+    'Droid Sans',
+    'PT Sans',
+    'PT Serif',
+    'Droid Serif',
+    'Roboto Slab',
+    'Work Sans',
+    'Inconsolata',
+    'Lora',
+    'Rubik',
+    'Source Code Pro',
+    'Muli',
+    'Karla',
+    'Cabin',
+    'Arimo',
+    'Titillium Web',
+    'Noto Serif',
+    'Hind',
+    'Quicksand',
+    'Vollkorn',
+    'Bitter',
+    'Fjalla One',
+    'Dancing Script',
+    'Pacifico',
+    'Lobster',
+    'Indie Flower',
+    'Shadows Into Light',
+    'Comfortaa',
+    'Satisfy',
+    'Amatic SC',
+    'Gloria Hallelujah',
+    'Righteous',
+    'Caveat',
+    'Kalam',
+    'Courgette',
+    'Architects Daughter',
+    'Permanent Marker',
+    'Orbitron',
+    'Fredoka One',
+    'Bangers',
+    'Creepster',
+    'Abril Fatface',
+    'Sigmar One',
+    'Bebas Neue',
+    'Anton',
+    'Passion One',
+    'Alfa Slab One',
+    'Yanone Kaffeesatz',
+    'Exo',
+    'Exo 2',
+    'Catamaran',
+    'Varela Round',
+    'Nunito Sans',
+    'Barlow',
+    'IBM Plex Sans',
+    'DM Sans',
+    'Manrope',
+    'Space Grotesk',
+    'Red Hat Display',
+    'Epilogue',
+    'Plus Jakarta Sans',
+    'Sora',
+    'Outfit',
+    'Albert Sans',
+    'Lexend',
+    'Figtree',
+]);
+
 interface WeWebVariable {
     id: string;
     name: string;
@@ -13,11 +101,24 @@ interface WeWebVariable {
     description?: string;
 }
 
+interface FontInfo {
+    type: 'google' | 'system' | 'custom';
+    url?: string;
+    family: string;
+    weights: number[];
+}
+
+interface ExtractionResult {
+    variables: WeWebVariable[];
+    fonts: FontInfo[];
+}
+
 export class VariableExtractor {
     private variables: Map<string, WeWebVariable> = new Map();
     private figmaToWeWebIdMap: Map<string, string> = new Map();
     private processedVariableIds: Set<string> = new Set();
     private progressCallback?: (message: string) => void;
+    private fontsMap: Map<string, FontInfo> = new Map();
 
     // Tracking counters
     private colorFromVariables = 0;
@@ -38,7 +139,7 @@ export class VariableExtractor {
         }
     }
 
-    async extractAllVariables(): Promise<WeWebVariable[]> {
+    async extractAllVariables(): Promise<ExtractionResult> {
         try {
             this.reportProgress('Starting variable extraction...');
 
@@ -152,16 +253,22 @@ export class VariableExtractor {
             this.reportProgress('Resolving variable aliases...');
             await this.resolveVariableAliases();
 
-            const result = Array.from(this.variables.values());
+            // Step 6: Update Google Fonts URLs with all collected weights
+            this.reportProgress('Updating Google Fonts URLs...');
+            this.updateGoogleFontUrls();
+
+            const variables = Array.from(this.variables.values());
+            const fonts = Array.from(this.fontsMap.values());
 
             // Breakdown by type
             const breakdown: Record<string, number> = {};
-            for (const variable of result) {
+            for (const variable of variables) {
                 breakdown[variable.type] = (breakdown[variable.type] || 0) + 1;
             }
 
             this.reportProgress('=== EXTRACTION SUMMARY ===');
-            this.reportProgress(`Total variables: ${result.length}`);
+            this.reportProgress(`Total variables: ${variables.length}`);
+            this.reportProgress(`Total fonts: ${fonts.length}`);
 
             // Detailed color breakdown
             this.reportProgress(`\nColor variables (${breakdown.color || 0} total):`);
@@ -172,6 +279,18 @@ export class VariableExtractor {
             this.reportProgress(`\nAll types:`);
             for (const [type, count] of Object.entries(breakdown)) {
                 this.reportProgress(`  - ${type}: ${count}`);
+            }
+
+            // Font breakdown
+            if (fonts.length > 0) {
+                this.reportProgress(`\nFonts detected:`);
+                const fontsByType = fonts.reduce((acc, font) => {
+                    acc[font.type] = (acc[font.type] || 0) + 1;
+                    return acc;
+                }, {} as Record<string, number>);
+                for (const [type, count] of Object.entries(fontsByType)) {
+                    this.reportProgress(`  - ${type}: ${count}`);
+                }
             }
 
             // Error summary
@@ -189,7 +308,7 @@ export class VariableExtractor {
 
             this.reportProgress('========================');
 
-            return result;
+            return { variables, fonts };
         } catch (error) {
             this.reportProgress(`⚠️ Error extracting variables: ${error}`);
             throw error;
@@ -669,10 +788,14 @@ export class VariableExtractor {
                 const letterSpacing = style.letterSpacing;
                 const lineHeight = style.lineHeight;
                 const textDecoration = style.textDecoration;
+                const fontWeight = this.mapFontWeight(fontName.style);
+
+                // Track font usage
+                this.trackFont(fontName.family, fontWeight);
 
                 const typographyValue = {
                     fontFamily: fontName.family,
-                    fontWeight: this.mapFontWeight(fontName.style),
+                    fontWeight,
                     fontSize: typeof fontSize === 'number' ? `${fontSize}px` : fontSize,
                     lineHeight: this.formatLineHeight(lineHeight),
                     letterSpacing: this.formatLetterSpacing(letterSpacing),
@@ -752,6 +875,92 @@ export class VariableExtractor {
             return `${letterSpacing.value / 100}em`;
         }
         return undefined;
+    }
+
+    private trackFont(fontFamily: string, fontWeight: number): void {
+        const existingFont = this.fontsMap.get(fontFamily);
+
+        if (existingFont) {
+            // Add weight if not already present
+            if (!existingFont.weights.includes(fontWeight)) {
+                existingFont.weights.push(fontWeight);
+                existingFont.weights.sort((a, b) => a - b);
+            }
+        } else {
+            // Create new font entry
+            const fontInfo: FontInfo = {
+                type: this.detectFontType(fontFamily),
+                family: fontFamily,
+                weights: [fontWeight],
+            };
+
+            // Add URL for Google Fonts
+            if (fontInfo.type === 'google') {
+                fontInfo.url = this.generateGoogleFontsUrl(fontFamily, [fontWeight]);
+            }
+
+            this.fontsMap.set(fontFamily, fontInfo);
+            this.reportProgress(`Detected ${fontInfo.type} font: ${fontFamily}`);
+        }
+    }
+
+    private detectFontType(fontFamily: string): 'google' | 'system' | 'custom' {
+        if (GOOGLE_FONTS.has(fontFamily)) {
+            return 'google';
+        }
+
+        // Common system fonts
+        const systemFonts = new Set([
+            'Arial',
+            'Helvetica',
+            'Times New Roman',
+            'Times',
+            'Courier New',
+            'Courier',
+            'Verdana',
+            'Georgia',
+            'Palatino',
+            'Garamond',
+            'Bookman',
+            'Comic Sans MS',
+            'Trebuchet MS',
+            'Arial Black',
+            'Impact',
+            'Lucida Console',
+            'Tahoma',
+            'Monaco',
+            'Menlo',
+            'Consolas',
+            'SF Pro Display',
+            'SF Pro Text',
+            'Segoe UI',
+            'Roboto',
+            'Helvetica Neue',
+            'Avenir',
+            'Futura',
+            'Gill Sans',
+        ]);
+
+        if (systemFonts.has(fontFamily)) {
+            return 'system';
+        }
+
+        return 'custom';
+    }
+
+    private generateGoogleFontsUrl(fontFamily: string, weights: number[]): string {
+        const family = fontFamily.replace(/\s+/g, '+');
+        const weightsParam = weights.sort((a, b) => a - b).join(',');
+        return `https://fonts.googleapis.com/css2?family=${family}:wght@${weightsParam}&display=swap`;
+    }
+
+    private updateGoogleFontUrls(): void {
+        // Update URLs for Google Fonts with all collected weights
+        for (const [fontFamily, fontInfo] of this.fontsMap.entries()) {
+            if (fontInfo.type === 'google') {
+                fontInfo.url = this.generateGoogleFontsUrl(fontFamily, fontInfo.weights);
+            }
+        }
     }
 }
 
