@@ -35,4 +35,5 @@ Use dynamic Iconify classes: `icon-[prefix--name]`
 
 - Test setup file: `__test__/setup.ts` - Contains Figma API mocks
 - Run tests: `pnpm test`
-- Update snapshots: `pnpm vitest run <test-file> -u`
+- Update snapshots: `pnpm test -u`
+- Type checking: `pnpm run typecheck`

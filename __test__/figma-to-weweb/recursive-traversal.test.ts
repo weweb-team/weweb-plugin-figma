@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import { ConversionWorkflow } from '../../src/figma-to-weweb/simple-converter';
+import { getChildAt, getChildrenArray } from '../helpers/test-utils';
 
 describe('recursive Tree Traversal', () => {
     let workflow: ConversionWorkflow;
@@ -116,40 +117,45 @@ describe('recursive Tree Traversal', () => {
             expect(Array.isArray(result.component.slots?.children)).toBe(true);
             expect(result.component.slots?.children).toHaveLength(1);
 
-            const level1 = result.component.slots?.children[0];
-            expect(level1.name).toBe('Level 1 Container');
-            expect(level1.tag).toBe('ww-div');
-            expect(level1.styles?.default?.flexDirection).toBe('row');
+            const level1 = getChildAt(result.component, 0);
+            expect(level1).toBeDefined();
+            expect(level1!.name).toBe('Level 1 Container');
+            expect(level1!.tag).toBe('ww-div');
+            expect(level1!.styles?.default?.flexDirection).toBe('row');
 
             // Then: Level 1 should have 2 children (Level 2A and 2B)
-            expect(level1.slots?.children).toHaveLength(2);
+            const level1Children = getChildrenArray(level1!);
+            expect(level1Children).toHaveLength(2);
 
-            const level2a = level1.slots?.children[0];
-            const level2b = level1.slots?.children[1];
+            const level2a = level1Children[0];
+            const level2b = level1Children[1];
 
             expect(level2a.name).toBe('Level 2A');
             expect(level2b.name).toBe('Level 2B');
 
             // Then: Level 2A should have 2 children (text and Level 3)
-            expect(level2a.slots?.children).toHaveLength(2);
+            const level2aChildren = getChildrenArray(level2a);
+            expect(level2aChildren).toHaveLength(2);
 
-            const text1 = level2a.slots?.children[0];
-            const level3 = level2a.slots?.children[1];
+            const text1 = level2aChildren[0];
+            const level3 = level2aChildren[1];
 
             expect(text1.tag).toBe('ww-text');
             expect(text1.props?.default?.text).toBe('Hello from deep level');
 
             expect(level3.name).toBe('Level 3 Container');
-            expect(level3.slots?.children).toHaveLength(1);
+            const level3Children = getChildrenArray(level3);
+            expect(level3Children).toHaveLength(1);
 
             // Then: Level 3 should have the deepest text
-            const deepestText = level3.slots?.children[0];
+            const deepestText = level3Children[0];
             expect(deepestText.tag).toBe('ww-text');
             expect(deepestText.props?.default?.text).toBe('Even deeper text');
 
             // Then: Level 2B should have its text
-            expect(level2b.slots?.children).toHaveLength(1);
-            const sideText = level2b.slots?.children[0];
+            const level2bChildren = getChildrenArray(level2b);
+            expect(level2bChildren).toHaveLength(1);
+            const sideText = level2bChildren[0];
             expect(sideText.tag).toBe('ww-text');
             expect(sideText.props?.default?.text).toBe('Side content');
         });
@@ -204,18 +210,20 @@ describe('recursive Tree Traversal', () => {
             const result = await workflow.convertSelection();
 
             // Root should have 2 children
-            expect(result.component.slots?.children).toHaveLength(2);
+            const rootChildren = getChildrenArray(result.component);
+            expect(rootChildren).toHaveLength(2);
 
             // First child should be empty
-            const emptyContainer = result.component.slots?.children[0];
+            const emptyContainer = rootChildren[0];
             expect(emptyContainer.name).toBe('Empty Container');
             expect(emptyContainer.slots?.children).toEqual([]);
 
             // Second child should have one empty nested child
-            const hasEmptyChild = result.component.slots?.children[1];
-            expect(hasEmptyChild.slots?.children).toHaveLength(1);
-            expect(hasEmptyChild.slots?.children[0].name).toBe('Nested Empty');
-            expect(hasEmptyChild.slots?.children[0].slots?.children).toEqual([]);
+            const hasEmptyChild = rootChildren[1];
+            const hasEmptyChildChildren = getChildrenArray(hasEmptyChild);
+            expect(hasEmptyChildChildren).toHaveLength(1);
+            expect(hasEmptyChildChildren[0].name).toBe('Nested Empty');
+            expect(hasEmptyChildChildren[0].slots?.children).toEqual([]);
         });
     });
 });

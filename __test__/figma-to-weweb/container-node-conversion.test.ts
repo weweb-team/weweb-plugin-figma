@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import { ConversionWorkflow } from '../../src/figma-to-weweb/simple-converter';
+import { getChildAt } from '../helpers/test-utils';
 
 describe('container Node Conversion', () => {
     let workflow: ConversionWorkflow;
@@ -77,13 +78,15 @@ describe('container Node Conversion', () => {
             const result = await workflow.convertSelection();
 
             // Then: Navigate to Container
-            const header = result.component.slots?.children[0];
-            expect(header.slots?.children).toHaveLength(1);
+            const header = getChildAt(result.component, 0);
+            expect(header).toBeDefined();
+            expect(header!.slots?.children).toBeDefined();
 
-            const container = header.slots?.children[0];
+            const container = getChildAt(header!, 0);
+            expect(container).toBeDefined();
 
             // Check basic structure
-            expect(container).toMatchObject({
+            expect(container!).toMatchObject({
                 tag: 'ww-div',
                 name: 'Container',
                 attrs: {
@@ -94,7 +97,7 @@ describe('container Node Conversion', () => {
             });
 
             // Check default styles
-            expect(container.styles?.default).toMatchObject({
+            expect(container!.styles?.default).toMatchObject({
                 display: 'flex',
                 width: '100%',
                 maxWidth: '1280px',
@@ -105,7 +108,7 @@ describe('container Node Conversion', () => {
             });
 
             // Check tablet styles
-            expect(container.styles?.tablet).toMatchObject({
+            expect(container!.styles?.tablet).toMatchObject({
                 maxWidth: '100%',
                 paddingLeft: '20px',
                 paddingRight: '20px',
@@ -151,14 +154,16 @@ describe('container Node Conversion', () => {
 
             const result = await workflow.convertSelection();
 
-            const constrained = result.component.slots?.children[0];
-            const unconstrained = result.component.slots?.children[1];
+            const constrained = getChildAt(result.component, 0);
+            const unconstrained = getChildAt(result.component, 1);
+            expect(constrained).toBeDefined();
+            expect(unconstrained).toBeDefined();
 
             // Constrained should have maxWidth
-            expect(constrained.styles?.default?.maxWidth).toBe('960px');
+            expect(constrained!.styles?.default?.maxWidth).toBe('960px');
 
             // Unconstrained should not have maxWidth
-            expect(unconstrained.styles?.default?.maxWidth).toBeUndefined();
+            expect(unconstrained!.styles?.default?.maxWidth).toBeUndefined();
         });
 
         it('should add responsive padding reduction for tablet', async () => {
@@ -195,8 +200,8 @@ describe('container Node Conversion', () => {
             expect(result.component.styles?.tablet?.paddingRight).toBeDefined();
 
             // Padding should be reduced for tablet
-            const defaultPadding = Number.parseInt(result.component.styles.default.paddingLeft);
-            const tabletPadding = Number.parseInt(result.component.styles.tablet.paddingLeft);
+            const defaultPadding = Number.parseInt(result.component.styles!.default.paddingLeft);
+            const tabletPadding = Number.parseInt(result.component.styles!.tablet!.paddingLeft);
             expect(tabletPadding).toBeLessThan(defaultPadding);
         });
 
@@ -232,13 +237,14 @@ describe('container Node Conversion', () => {
 
             const result = await workflow.convertSelection();
 
-            const fillChild = result.component.slots?.children[0];
+            const fillChild = getChildAt(result.component, 0);
+            expect(fillChild).toBeDefined();
 
             // FILL should result in 100% width
-            expect(fillChild.styles?.default?.width).toBe('100%');
+            expect(fillChild!.styles?.default?.width).toBe('100%');
 
             // maxWidth should be preserved
-            expect(fillChild.styles?.default?.maxWidth).toBe('1200px');
+            expect(fillChild!.styles?.default?.maxWidth).toBe('1200px');
         });
     });
 });

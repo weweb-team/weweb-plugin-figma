@@ -1,45 +1,42 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import { ConversionWorkflow } from '../../src/figma-to-weweb/simple-converter';
+import { mockFigmaVariables } from '../helpers/mock-figma-variables';
+import { getChildAt } from '../helpers/test-utils';
 
 describe('nav Wrapper Conversion', () => {
     let workflow: ConversionWorkflow;
 
+    // Set up mock variables for all tests in this suite
+    mockFigmaVariables([
+        {
+            id: 'VariableID:color/gray-200',
+            name: 'Gray-200',
+            resolvedType: 'COLOR',
+            valuesByMode: {
+                default: { r: 0.91, g: 0.92, b: 0.92, a: 1 },
+            },
+        },
+        {
+            id: 'VariableID:shadow/xs',
+            name: 'shadow-xs',
+            resolvedType: 'COLOR',
+            valuesByMode: {
+                default: { r: 0.04, g: 0.05, b: 0.07, a: 0.05 },
+            },
+        },
+        {
+            id: 'VariableID:color/white',
+            name: 'Base-White',
+            resolvedType: 'COLOR',
+            valuesByMode: {
+                default: { r: 1, g: 1, b: 1, a: 1 },
+            },
+        },
+    ]);
+
     beforeEach(() => {
         workflow = new ConversionWorkflow();
-        // Extend the figma mock with variables API
         figma.currentPage.selection = [];
-        figma.variables = {
-            getVariableById: (id: string) => {
-                // Mock variable data
-                const variables = {
-                    'VariableID:color/gray-200': {
-                        id: 'VariableID:color/gray-200',
-                        name: 'Gray-200',
-                        resolvedType: 'COLOR',
-                        valuesByMode: {
-                            default: { r: 0.91, g: 0.92, b: 0.92, a: 1 },
-                        },
-                    },
-                    'VariableID:shadow/xs': {
-                        id: 'VariableID:shadow/xs',
-                        name: 'shadow-xs',
-                        resolvedType: 'COLOR',
-                        valuesByMode: {
-                            default: { r: 0.04, g: 0.05, b: 0.07, a: 0.05 },
-                        },
-                    },
-                    'VariableID:color/white': {
-                        id: 'VariableID:color/white',
-                        name: 'Base-White',
-                        resolvedType: 'COLOR',
-                        valuesByMode: {
-                            default: { r: 1, g: 1, b: 1, a: 1 },
-                        },
-                    },
-                };
-                return variables[id];
-            },
-        };
     });
 
     describe('nav wrapper with border, shadow and flex properties', () => {
@@ -152,12 +149,15 @@ describe('nav Wrapper Conversion', () => {
             const result = await workflow.convertSelection();
 
             // Then: Navigate to Nav wrapper
-            const header = result.component.slots?.children[0];
-            const container = header.slots?.children[0];
-            const navWrapperComponent = container.slots?.children[0];
+            const header = getChildAt(result.component, 0);
+            expect(header).toBeDefined();
+            const container = getChildAt(header!, 0);
+            expect(container).toBeDefined();
+            const navWrapperComponent = getChildAt(container!, 0);
+            expect(navWrapperComponent).toBeDefined();
 
             // Check basic structure
-            expect(navWrapperComponent).toMatchObject({
+            expect(navWrapperComponent!).toMatchObject({
                 tag: 'ww-div',
                 name: 'Nav wrapper',
                 attrs: {
@@ -168,7 +168,7 @@ describe('nav Wrapper Conversion', () => {
             });
 
             // Check all required styles exactly as specified
-            expect(navWrapperComponent.styles?.default).toMatchObject({
+            expect(navWrapperComponent!.styles?.default).toMatchObject({
                 justifyContent: 'space-between',
                 alignItems: 'center',
                 borderRadius: '16px',
@@ -193,7 +193,7 @@ describe('nav Wrapper Conversion', () => {
             });
 
             // Check tablet styles
-            expect(navWrapperComponent.styles?.tablet).toMatchObject({
+            expect(navWrapperComponent!.styles?.tablet).toMatchObject({
                 maxWidth: '100%',
             });
 

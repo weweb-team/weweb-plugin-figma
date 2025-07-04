@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import { ConversionWorkflow } from '../../src/figma-to-weweb/simple-converter';
+import { getChildAt } from '../helpers/test-utils';
 
 describe('header Node Conversion', () => {
     let workflow: ConversionWorkflow;
@@ -72,10 +73,11 @@ describe('header Node Conversion', () => {
             // Then: Root should have the Header as first child
             expect(result.component.slots?.children).toHaveLength(1);
 
-            const headerComponent = result.component.slots?.children[0];
+            const headerComponent = getChildAt(result.component, 0);
+            expect(headerComponent).toBeDefined();
 
             // Check basic structure
-            expect(headerComponent).toMatchObject({
+            expect(headerComponent!).toMatchObject({
                 tag: 'ww-div',
                 name: 'Header',
                 attrs: {
@@ -86,7 +88,7 @@ describe('header Node Conversion', () => {
             });
 
             // Check default styles
-            expect(headerComponent.styles?.default).toMatchObject({
+            expect(headerComponent!.styles?.default).toMatchObject({
                 display: 'flex',
                 width: '100%',
                 paddingTop: '12px',
@@ -96,7 +98,7 @@ describe('header Node Conversion', () => {
             });
 
             // Check that tablet styles are present
-            expect(headerComponent.styles?.tablet).toMatchObject({
+            expect(headerComponent!.styles?.tablet).toMatchObject({
                 maxWidth: '100%',
             });
         });
@@ -174,14 +176,16 @@ describe('header Node Conversion', () => {
 
             const result = await workflow.convertSelection();
 
-            const fillChild = result.component.slots?.children[0];
-            const fixedChild = result.component.slots?.children[1];
+            const fillChild = getChildAt(result.component, 0);
+            const fixedChild = getChildAt(result.component, 1);
+            expect(fillChild).toBeDefined();
+            expect(fixedChild).toBeDefined();
 
             // FILL should be converted to 100%
-            expect(fillChild.styles?.default?.width).toBe('100%');
+            expect(fillChild!.styles?.default?.width).toBe('100%');
 
             // FIXED should keep pixel value
-            expect(fixedChild.styles?.default?.width).toBe('500px');
+            expect(fixedChild!.styles?.default?.width).toBe('500px');
         });
     });
 });
