@@ -1,0 +1,1634 @@
+{
+  "id": "I1647:388494;1296:1034",
+  "name": "Dropdown header navigation",
+  "type": "INSTANCE",
+  "visible": true,
+  "width": 1440,
+  "height": 76,
+  "x": 0,
+  "y": 0,
+  "layoutMode": "NONE",
+  "layoutSizingHorizontal": "FILL",
+  "layoutSizingVertical": "FIXED",
+  "primaryAxisAlignItems": "MIN",
+  "counterAxisAlignItems": "CENTER",
+  "itemSpacing": 0,
+  "layoutPositioning": "AUTO",
+  "cornerRadius": 0,
+  "paddingLeft": 0,
+  "paddingRight": 0,
+  "paddingTop": 0,
+  "paddingBottom": 0,
+  "parent": {
+    "id": "1647:388494",
+    "name": "Hero header section",
+    "type": "INSTANCE",
+    "layoutMode": "VERTICAL"
+  },
+  "children": [
+    {
+      "id": "I1647:388494;1296:1034;7582:193427",
+      "name": "Header",
+      "type": "FRAME",
+      "visible": true,
+      "width": 1440,
+      "height": 76,
+      "x": 0,
+      "y": 0,
+      "layoutMode": "VERTICAL",
+      "layoutSizingHorizontal": "FIXED",
+      "layoutSizingVertical": "HUG",
+      "primaryAxisAlignItems": "CENTER",
+      "counterAxisAlignItems": "CENTER",
+      "itemSpacing": 0,
+      "layoutPositioning": "AUTO",
+      "cornerRadius": 0,
+      "paddingLeft": 0,
+      "paddingRight": 0,
+      "paddingTop": 12,
+      "paddingBottom": 0,
+      "parent": {
+        "id": "I1647:388494;1296:1034",
+        "name": "Dropdown header navigation",
+        "type": "INSTANCE",
+        "layoutMode": "NONE"
+      },
+      "children": [
+        {
+          "id": "I1647:388494;1296:1034;7582:193428",
+          "name": "Container",
+          "type": "FRAME",
+          "visible": true,
+          "width": 1280,
+          "height": 64,
+          "x": 80,
+          "y": 12,
+          "layoutMode": "HORIZONTAL",
+          "layoutSizingHorizontal": "FILL",
+          "layoutSizingVertical": "HUG",
+          "primaryAxisAlignItems": "SPACE_BETWEEN",
+          "counterAxisAlignItems": "CENTER",
+          "itemSpacing": 0,
+          "layoutPositioning": "AUTO",
+          "maxWidth": 1280,
+          "cornerRadius": 0,
+          "paddingLeft": 32,
+          "paddingRight": 32,
+          "paddingTop": 0,
+          "paddingBottom": 0,
+          "parent": {
+            "id": "I1647:388494;1296:1034;7582:193427",
+            "name": "Header",
+            "type": "FRAME",
+            "layoutMode": "VERTICAL"
+          },
+          "children": [
+            {
+              "id": "I1647:388494;1296:1034;7582:193429",
+              "name": "Nav wrapper",
+              "type": "FRAME",
+              "visible": true,
+              "width": 1216,
+              "height": 64,
+              "x": 32,
+              "y": 0,
+              "layoutMode": "HORIZONTAL",
+              "layoutSizingHorizontal": "FIXED",
+              "layoutSizingVertical": "HUG",
+              "primaryAxisAlignItems": "SPACE_BETWEEN",
+              "counterAxisAlignItems": "CENTER",
+              "itemSpacing": 0,
+              "layoutPositioning": "AUTO",
+              "cornerRadius": 16,
+              "paddingLeft": 16,
+              "paddingRight": 12,
+              "paddingTop": 12,
+              "paddingBottom": 12,
+              "parent": {
+                "id": "I1647:388494;1296:1034;7582:193428",
+                "name": "Container",
+                "type": "FRAME",
+                "layoutMode": "HORIZONTAL"
+              },
+              "children": [
+                {
+                  "id": "I1647:388494;1296:1034;7582:193430",
+                  "name": "Content",
+                  "type": "FRAME",
+                  "visible": true,
+                  "width": 701,
+                  "height": 32,
+                  "x": 16,
+                  "y": 16,
+                  "layoutMode": "HORIZONTAL",
+                  "layoutSizingHorizontal": "HUG",
+                  "layoutSizingVertical": "HUG",
+                  "primaryAxisAlignItems": "MIN",
+                  "counterAxisAlignItems": "CENTER",
+                  "itemSpacing": 32,
+                  "layoutPositioning": "AUTO",
+                  "cornerRadius": 0,
+                  "paddingLeft": 0,
+                  "paddingRight": 0,
+                  "paddingTop": 0,
+                  "paddingBottom": 0,
+                  "parent": {
+                    "id": "I1647:388494;1296:1034;7582:193429",
+                    "name": "Nav wrapper",
+                    "type": "FRAME",
+                    "layoutMode": "HORIZONTAL"
+                  },
+                  "children": [
+                    {
+                      "id": "I1647:388494;1296:1034;7582:193431",
+                      "name": "Logo",
+                      "type": "INSTANCE",
+                      "visible": true,
+                      "width": 139,
+                      "height": 32,
+                      "x": 0,
+                      "y": 0,
+                      "layoutMode": "HORIZONTAL",
+                      "layoutSizingHorizontal": "FIXED",
+                      "layoutSizingVertical": "HUG",
+                      "primaryAxisAlignItems": "MIN",
+                      "counterAxisAlignItems": "MIN",
+                      "itemSpacing": 0,
+                      "layoutPositioning": "AUTO",
+                      "cornerRadius": 0,
+                      "paddingLeft": 0,
+                      "paddingRight": 0,
+                      "paddingTop": 0,
+                      "paddingBottom": 0,
+                      "parent": {
+                        "id": "I1647:388494;1296:1034;7582:193430",
+                        "name": "Content",
+                        "type": "FRAME",
+                        "layoutMode": "HORIZONTAL"
+                      },
+                      "children": [
+                        {
+                          "id": "I1647:388494;1296:1034;7582:193431;2924:375962",
+                          "name": "Logo wrap",
+                          "type": "FRAME",
+                          "visible": true,
+                          "width": 139,
+                          "height": 32,
+                          "x": 0,
+                          "y": 0,
+                          "layoutMode": "NONE",
+                          "layoutSizingHorizontal": "FIXED",
+                          "layoutSizingVertical": "FIXED",
+                          "primaryAxisAlignItems": "MIN",
+                          "counterAxisAlignItems": "MIN",
+                          "itemSpacing": 0,
+                          "layoutPositioning": "AUTO",
+                          "cornerRadius": 0,
+                          "paddingLeft": 0,
+                          "paddingRight": 0,
+                          "paddingTop": 0,
+                          "paddingBottom": 0,
+                          "parent": {
+                            "id": "I1647:388494;1296:1034;7582:193431",
+                            "name": "Logo",
+                            "type": "INSTANCE",
+                            "layoutMode": "HORIZONTAL"
+                          },
+                          "children": [
+                            {
+                              "id": "I1647:388494;1296:1034;7582:193431;1083:50705",
+                              "name": "Logomark",
+                              "type": "INSTANCE",
+                              "visible": true,
+                              "width": 32,
+                              "height": 32,
+                              "x": 0,
+                              "y": 0,
+                              "layoutMode": "HORIZONTAL",
+                              "layoutSizingHorizontal": "HUG",
+                              "layoutSizingVertical": "HUG",
+                              "primaryAxisAlignItems": "MIN",
+                              "counterAxisAlignItems": "MIN",
+                              "itemSpacing": 0,
+                              "layoutPositioning": "AUTO",
+                              "cornerRadius": 0,
+                              "paddingLeft": 0,
+                              "paddingRight": 0,
+                              "paddingTop": 0,
+                              "paddingBottom": 0,
+                              "parent": {
+                                "id": "I1647:388494;1296:1034;7582:193431;2924:375962",
+                                "name": "Logo wrap",
+                                "type": "FRAME",
+                                "layoutMode": "NONE"
+                              },
+                              "children": [
+                                {
+                                  "id": "I1647:388494;1296:1034;7582:193431;1083:50705;7542:127089",
+                                  "name": "Content",
+                                  "type": "FRAME",
+                                  "visible": true,
+                                  "width": 32,
+                                  "height": 32,
+                                  "x": 0,
+                                  "y": 0,
+                                  "layoutMode": "NONE",
+                                  "layoutSizingHorizontal": "FIXED",
+                                  "layoutSizingVertical": "FIXED",
+                                  "primaryAxisAlignItems": "MIN",
+                                  "counterAxisAlignItems": "MIN",
+                                  "itemSpacing": 0,
+                                  "layoutPositioning": "AUTO",
+                                  "cornerRadius": 8,
+                                  "paddingLeft": 0,
+                                  "paddingRight": 0,
+                                  "paddingTop": 0,
+                                  "paddingBottom": 0,
+                                  "parent": {
+                                    "id": "I1647:388494;1296:1034;7582:193431;1083:50705",
+                                    "name": "Logomark",
+                                    "type": "INSTANCE",
+                                    "layoutMode": "HORIZONTAL"
+                                  },
+                                  "children": [
+                                    {
+                                      "id": "I1647:388494;1296:1034;7582:193431;1083:50705;7542:127090",
+                                      "name": "Grid",
+                                      "type": "FRAME",
+                                      "visible": true,
+                                      "width": 32,
+                                      "height": 32,
+                                      "x": 0,
+                                      "y": 0,
+                                      "layoutMode": "NONE",
+                                      "layoutSizingHorizontal": "FIXED",
+                                      "layoutSizingVertical": "FIXED",
+                                      "primaryAxisAlignItems": "MIN",
+                                      "counterAxisAlignItems": "MIN",
+                                      "itemSpacing": 0,
+                                      "layoutPositioning": "AUTO",
+                                      "cornerRadius": 0,
+                                      "paddingLeft": 0,
+                                      "paddingRight": 0,
+                                      "paddingTop": 0,
+                                      "paddingBottom": 0,
+                                      "parent": {
+                                        "id": "I1647:388494;1296:1034;7582:193431;1083:50705;7542:127089",
+                                        "name": "Content",
+                                        "type": "FRAME",
+                                        "layoutMode": "NONE"
+                                      },
+                                      "children": [
+                                        {
+                                          "id": "I1647:388494;1296:1034;7582:193431;1083:50705;7542:127091",
+                                          "name": "Vector",
+                                          "type": "VECTOR",
+                                          "visible": true,
+                                          "width": 32,
+                                          "height": 32,
+                                          "x": 0,
+                                          "y": 0,
+                                          "layoutPositioning": "AUTO",
+                                          "cornerRadius": 0,
+                                          "parent": {
+                                            "id": "I1647:388494;1296:1034;7582:193431;1083:50705;7542:127090",
+                                            "name": "Grid",
+                                            "type": "FRAME",
+                                            "layoutMode": "NONE"
+                                          }
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "id": "I1647:388494;1296:1034;7582:193431;1083:50705;9956:4629",
+                                      "name": "Palantir",
+                                      "type": "FRAME",
+                                      "visible": true,
+                                      "width": 16,
+                                      "height": 16,
+                                      "x": 8,
+                                      "y": 8,
+                                      "layoutMode": "NONE",
+                                      "layoutSizingHorizontal": "FIXED",
+                                      "layoutSizingVertical": "FIXED",
+                                      "primaryAxisAlignItems": "MIN",
+                                      "counterAxisAlignItems": "MIN",
+                                      "itemSpacing": 0,
+                                      "layoutPositioning": "AUTO",
+                                      "cornerRadius": 999,
+                                      "paddingLeft": 0,
+                                      "paddingRight": 0,
+                                      "paddingTop": 0,
+                                      "paddingBottom": 0,
+                                      "parent": {
+                                        "id": "I1647:388494;1296:1034;7582:193431;1083:50705;7542:127089",
+                                        "name": "Content",
+                                        "type": "FRAME",
+                                        "layoutMode": "NONE"
+                                      },
+                                      "children": [
+                                        {
+                                          "id": "I1647:388494;1296:1034;7582:193431;1083:50705;9956:4630",
+                                          "name": "Reflection",
+                                          "type": "VECTOR",
+                                          "visible": true,
+                                          "width": 9.600000381469727,
+                                          "height": 3.200000047683716,
+                                          "x": 3.1999969482421875,
+                                          "y": 1.5999755859375,
+                                          "layoutPositioning": "AUTO",
+                                          "cornerRadius": 0,
+                                          "parent": {
+                                            "id": "I1647:388494;1296:1034;7582:193431;1083:50705;9956:4629",
+                                            "name": "Palantir",
+                                            "type": "FRAME",
+                                            "layoutMode": "NONE"
+                                          }
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "id": "I1647:388494;1296:1034;7582:193431;1083:50705;7542:127093",
+                                      "name": "Blur",
+                                      "type": "FRAME",
+                                      "visible": true,
+                                      "width": 32,
+                                      "height": 16,
+                                      "x": 0,
+                                      "y": 16,
+                                      "layoutMode": "NONE",
+                                      "layoutSizingHorizontal": "FIXED",
+                                      "layoutSizingVertical": "FIXED",
+                                      "primaryAxisAlignItems": "MIN",
+                                      "counterAxisAlignItems": "MIN",
+                                      "itemSpacing": 0,
+                                      "layoutPositioning": "AUTO",
+                                      "paddingLeft": 0,
+                                      "paddingRight": 0,
+                                      "paddingTop": 0,
+                                      "paddingBottom": 0,
+                                      "parent": {
+                                        "id": "I1647:388494;1296:1034;7582:193431;1083:50705;7542:127089",
+                                        "name": "Content",
+                                        "type": "FRAME",
+                                        "layoutMode": "NONE"
+                                      }
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "id": "I1647:388494;1296:1034;7582:193431;7542:202995",
+                              "name": "Logotype",
+                              "type": "FRAME",
+                              "visible": true,
+                              "width": 97,
+                              "height": 32,
+                              "x": 42,
+                              "y": 0,
+                              "layoutMode": "NONE",
+                              "layoutSizingHorizontal": "FIXED",
+                              "layoutSizingVertical": "FIXED",
+                              "primaryAxisAlignItems": "MIN",
+                              "counterAxisAlignItems": "MIN",
+                              "itemSpacing": 0,
+                              "layoutPositioning": "AUTO",
+                              "cornerRadius": 0,
+                              "paddingLeft": 0,
+                              "paddingRight": 0,
+                              "paddingTop": 0,
+                              "paddingBottom": 0,
+                              "parent": {
+                                "id": "I1647:388494;1296:1034;7582:193431;2924:375962",
+                                "name": "Logo wrap",
+                                "type": "FRAME",
+                                "layoutMode": "NONE"
+                              },
+                              "children": [
+                                {
+                                  "id": "I1647:388494;1296:1034;7582:193431;7542:202996",
+                                  "name": "Vector",
+                                  "type": "VECTOR",
+                                  "visible": true,
+                                  "width": 96.67294311523438,
+                                  "height": 15.589488983154297,
+                                  "x": 0,
+                                  "y": 7.6235809326171875,
+                                  "layoutPositioning": "AUTO",
+                                  "cornerRadius": 0,
+                                  "parent": {
+                                    "id": "I1647:388494;1296:1034;7582:193431;7542:202995",
+                                    "name": "Logotype",
+                                    "type": "FRAME",
+                                    "layoutMode": "NONE"
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "id": "I1647:388494;1296:1034;7582:193432",
+                      "name": "Navigation",
+                      "type": "FRAME",
+                      "visible": true,
+                      "width": 530,
+                      "height": 32,
+                      "x": 171,
+                      "y": 0,
+                      "layoutMode": "HORIZONTAL",
+                      "layoutSizingHorizontal": "HUG",
+                      "layoutSizingVertical": "HUG",
+                      "primaryAxisAlignItems": "MIN",
+                      "counterAxisAlignItems": "CENTER",
+                      "itemSpacing": 20,
+                      "layoutPositioning": "AUTO",
+                      "cornerRadius": 0,
+                      "paddingLeft": 0,
+                      "paddingRight": 0,
+                      "paddingTop": 0,
+                      "paddingBottom": 0,
+                      "parent": {
+                        "id": "I1647:388494;1296:1034;7582:193430",
+                        "name": "Content",
+                        "type": "FRAME",
+                        "layoutMode": "HORIZONTAL"
+                      },
+                      "children": [
+                        {
+                          "id": "I1647:388494;1296:1034;7582:194771",
+                          "name": "_Dropdown header navigation trigger",
+                          "type": "INSTANCE",
+                          "visible": true,
+                          "width": 116,
+                          "height": 32,
+                          "x": 0,
+                          "y": 0,
+                          "layoutMode": "VERTICAL",
+                          "layoutSizingHorizontal": "HUG",
+                          "layoutSizingVertical": "HUG",
+                          "primaryAxisAlignItems": "MIN",
+                          "counterAxisAlignItems": "CENTER",
+                          "itemSpacing": 0,
+                          "layoutPositioning": "AUTO",
+                          "cornerRadius": 0,
+                          "paddingLeft": 0,
+                          "paddingRight": 0,
+                          "paddingTop": 0,
+                          "paddingBottom": 0,
+                          "parent": {
+                            "id": "I1647:388494;1296:1034;7582:193432",
+                            "name": "Navigation",
+                            "type": "FRAME",
+                            "layoutMode": "HORIZONTAL"
+                          },
+                          "children": [
+                            {
+                              "id": "I1647:388494;1296:1034;7582:194771;10332:6608",
+                              "name": "_Dropdown header navigation button",
+                              "type": "INSTANCE",
+                              "visible": true,
+                              "width": 116,
+                              "height": 32,
+                              "x": 0,
+                              "y": 0,
+                              "layoutMode": "HORIZONTAL",
+                              "layoutSizingHorizontal": "HUG",
+                              "layoutSizingVertical": "HUG",
+                              "primaryAxisAlignItems": "CENTER",
+                              "counterAxisAlignItems": "CENTER",
+                              "itemSpacing": 2,
+                              "layoutPositioning": "AUTO",
+                              "cornerRadius": 8,
+                              "paddingLeft": 6,
+                              "paddingRight": 6,
+                              "paddingTop": 4,
+                              "paddingBottom": 4,
+                              "parent": {
+                                "id": "I1647:388494;1296:1034;7582:194771",
+                                "name": "_Dropdown header navigation trigger",
+                                "type": "INSTANCE",
+                                "layoutMode": "VERTICAL"
+                              },
+                              "children": [
+                                {
+                                  "id": "I1647:388494;1296:1034;7582:194771;10332:6608;10332:6563",
+                                  "name": "Text padding",
+                                  "type": "FRAME",
+                                  "visible": true,
+                                  "width": 86,
+                                  "height": 24,
+                                  "x": 6,
+                                  "y": 4,
+                                  "layoutMode": "HORIZONTAL",
+                                  "layoutSizingHorizontal": "HUG",
+                                  "layoutSizingVertical": "HUG",
+                                  "primaryAxisAlignItems": "CENTER",
+                                  "counterAxisAlignItems": "CENTER",
+                                  "itemSpacing": 0,
+                                  "layoutPositioning": "AUTO",
+                                  "cornerRadius": 0,
+                                  "paddingLeft": 2,
+                                  "paddingRight": 2,
+                                  "paddingTop": 0,
+                                  "paddingBottom": 0,
+                                  "parent": {
+                                    "id": "I1647:388494;1296:1034;7582:194771;10332:6608",
+                                    "name": "_Dropdown header navigation button",
+                                    "type": "INSTANCE",
+                                    "layoutMode": "HORIZONTAL"
+                                  },
+                                  "children": [
+                                    {
+                                      "id": "I1647:388494;1296:1034;7582:194771;10332:6608;10332:6564",
+                                      "name": "Text",
+                                      "type": "TEXT",
+                                      "visible": true,
+                                      "width": 82,
+                                      "height": 24,
+                                      "x": 2,
+                                      "y": 0,
+                                      "layoutPositioning": "AUTO",
+                                      "characters": "Resources",
+                                      "fontSize": 16,
+                                      "textAutoResize": "WIDTH_AND_HEIGHT",
+                                      "textAlignHorizontal": "LEFT",
+                                      "textAlignVertical": "TOP",
+                                      "parent": {
+                                        "id": "I1647:388494;1296:1034;7582:194771;10332:6608;10332:6563",
+                                        "name": "Text padding",
+                                        "type": "FRAME",
+                                        "layoutMode": "HORIZONTAL"
+                                      }
+                                    }
+                                  ]
+                                },
+                                {
+                                  "id": "I1647:388494;1296:1034;7582:194771;10332:6608;10332:6565",
+                                  "name": "chevron-down",
+                                  "type": "INSTANCE",
+                                  "visible": true,
+                                  "width": 16,
+                                  "height": 16,
+                                  "x": 94,
+                                  "y": 8,
+                                  "layoutMode": "NONE",
+                                  "layoutSizingHorizontal": "FIXED",
+                                  "layoutSizingVertical": "FIXED",
+                                  "primaryAxisAlignItems": "MIN",
+                                  "counterAxisAlignItems": "MIN",
+                                  "itemSpacing": 0,
+                                  "layoutPositioning": "AUTO",
+                                  "cornerRadius": 0,
+                                  "paddingLeft": 0,
+                                  "paddingRight": 0,
+                                  "paddingTop": 0,
+                                  "paddingBottom": 0,
+                                  "parent": {
+                                    "id": "I1647:388494;1296:1034;7582:194771;10332:6608",
+                                    "name": "_Dropdown header navigation button",
+                                    "type": "INSTANCE",
+                                    "layoutMode": "HORIZONTAL"
+                                  },
+                                  "children": [
+                                    {
+                                      "id": "I1647:388494;1296:1034;7582:194771;10332:6608;10332:6565;3463:404534",
+                                      "name": "Icon",
+                                      "type": "VECTOR",
+                                      "visible": true,
+                                      "width": 8,
+                                      "height": 4,
+                                      "x": 4,
+                                      "y": 6,
+                                      "layoutPositioning": "AUTO",
+                                      "cornerRadius": 0,
+                                      "parent": {
+                                        "id": "I1647:388494;1296:1034;7582:194771;10332:6608;10332:6565",
+                                        "name": "chevron-down",
+                                        "type": "INSTANCE",
+                                        "layoutMode": "NONE"
+                                      }
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "id": "I1647:388494;1296:1034;7582:194779",
+                          "name": "_Dropdown header navigation trigger",
+                          "type": "INSTANCE",
+                          "visible": true,
+                          "width": 116,
+                          "height": 32,
+                          "x": 136,
+                          "y": 0,
+                          "layoutMode": "VERTICAL",
+                          "layoutSizingHorizontal": "HUG",
+                          "layoutSizingVertical": "HUG",
+                          "primaryAxisAlignItems": "MIN",
+                          "counterAxisAlignItems": "CENTER",
+                          "itemSpacing": 0,
+                          "layoutPositioning": "AUTO",
+                          "cornerRadius": 0,
+                          "paddingLeft": 0,
+                          "paddingRight": 0,
+                          "paddingTop": 0,
+                          "paddingBottom": 0,
+                          "parent": {
+                            "id": "I1647:388494;1296:1034;7582:193432",
+                            "name": "Navigation",
+                            "type": "FRAME",
+                            "layoutMode": "HORIZONTAL"
+                          },
+                          "children": [
+                            {
+                              "id": "I1647:388494;1296:1034;7582:194779;10332:6608",
+                              "name": "_Dropdown header navigation button",
+                              "type": "INSTANCE",
+                              "visible": true,
+                              "width": 116,
+                              "height": 32,
+                              "x": 0,
+                              "y": 0,
+                              "layoutMode": "HORIZONTAL",
+                              "layoutSizingHorizontal": "HUG",
+                              "layoutSizingVertical": "HUG",
+                              "primaryAxisAlignItems": "CENTER",
+                              "counterAxisAlignItems": "CENTER",
+                              "itemSpacing": 2,
+                              "layoutPositioning": "AUTO",
+                              "cornerRadius": 8,
+                              "paddingLeft": 6,
+                              "paddingRight": 6,
+                              "paddingTop": 4,
+                              "paddingBottom": 4,
+                              "parent": {
+                                "id": "I1647:388494;1296:1034;7582:194779",
+                                "name": "_Dropdown header navigation trigger",
+                                "type": "INSTANCE",
+                                "layoutMode": "VERTICAL"
+                              },
+                              "children": [
+                                {
+                                  "id": "I1647:388494;1296:1034;7582:194779;10332:6608;10332:6563",
+                                  "name": "Text padding",
+                                  "type": "FRAME",
+                                  "visible": true,
+                                  "width": 86,
+                                  "height": 24,
+                                  "x": 6,
+                                  "y": 4,
+                                  "layoutMode": "HORIZONTAL",
+                                  "layoutSizingHorizontal": "HUG",
+                                  "layoutSizingVertical": "HUG",
+                                  "primaryAxisAlignItems": "CENTER",
+                                  "counterAxisAlignItems": "CENTER",
+                                  "itemSpacing": 0,
+                                  "layoutPositioning": "AUTO",
+                                  "cornerRadius": 0,
+                                  "paddingLeft": 2,
+                                  "paddingRight": 2,
+                                  "paddingTop": 0,
+                                  "paddingBottom": 0,
+                                  "parent": {
+                                    "id": "I1647:388494;1296:1034;7582:194779;10332:6608",
+                                    "name": "_Dropdown header navigation button",
+                                    "type": "INSTANCE",
+                                    "layoutMode": "HORIZONTAL"
+                                  },
+                                  "children": [
+                                    {
+                                      "id": "I1647:388494;1296:1034;7582:194779;10332:6608;10332:6564",
+                                      "name": "Text",
+                                      "type": "TEXT",
+                                      "visible": true,
+                                      "width": 82,
+                                      "height": 24,
+                                      "x": 2,
+                                      "y": 0,
+                                      "layoutPositioning": "AUTO",
+                                      "characters": "Resources",
+                                      "fontSize": 16,
+                                      "textAutoResize": "WIDTH_AND_HEIGHT",
+                                      "textAlignHorizontal": "LEFT",
+                                      "textAlignVertical": "TOP",
+                                      "parent": {
+                                        "id": "I1647:388494;1296:1034;7582:194779;10332:6608;10332:6563",
+                                        "name": "Text padding",
+                                        "type": "FRAME",
+                                        "layoutMode": "HORIZONTAL"
+                                      }
+                                    }
+                                  ]
+                                },
+                                {
+                                  "id": "I1647:388494;1296:1034;7582:194779;10332:6608;10332:6565",
+                                  "name": "chevron-down",
+                                  "type": "INSTANCE",
+                                  "visible": true,
+                                  "width": 16,
+                                  "height": 16,
+                                  "x": 94,
+                                  "y": 8,
+                                  "layoutMode": "NONE",
+                                  "layoutSizingHorizontal": "FIXED",
+                                  "layoutSizingVertical": "FIXED",
+                                  "primaryAxisAlignItems": "MIN",
+                                  "counterAxisAlignItems": "MIN",
+                                  "itemSpacing": 0,
+                                  "layoutPositioning": "AUTO",
+                                  "cornerRadius": 0,
+                                  "paddingLeft": 0,
+                                  "paddingRight": 0,
+                                  "paddingTop": 0,
+                                  "paddingBottom": 0,
+                                  "parent": {
+                                    "id": "I1647:388494;1296:1034;7582:194779;10332:6608",
+                                    "name": "_Dropdown header navigation button",
+                                    "type": "INSTANCE",
+                                    "layoutMode": "HORIZONTAL"
+                                  },
+                                  "children": [
+                                    {
+                                      "id": "I1647:388494;1296:1034;7582:194779;10332:6608;10332:6565;3463:404534",
+                                      "name": "Icon",
+                                      "type": "VECTOR",
+                                      "visible": true,
+                                      "width": 8,
+                                      "height": 4,
+                                      "x": 4,
+                                      "y": 6,
+                                      "layoutPositioning": "AUTO",
+                                      "cornerRadius": 0,
+                                      "parent": {
+                                        "id": "I1647:388494;1296:1034;7582:194779;10332:6608;10332:6565",
+                                        "name": "chevron-down",
+                                        "type": "INSTANCE",
+                                        "layoutMode": "NONE"
+                                      }
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "id": "I1647:388494;1296:1034;7582:193435",
+                          "name": "Buttons/Button",
+                          "type": "INSTANCE",
+                          "visible": true,
+                          "width": 54,
+                          "height": 24,
+                          "x": 272,
+                          "y": 4,
+                          "layoutMode": "HORIZONTAL",
+                          "layoutSizingHorizontal": "HUG",
+                          "layoutSizingVertical": "HUG",
+                          "primaryAxisAlignItems": "CENTER",
+                          "counterAxisAlignItems": "CENTER",
+                          "itemSpacing": 4,
+                          "layoutPositioning": "AUTO",
+                          "cornerRadius": 0,
+                          "paddingLeft": 0,
+                          "paddingRight": 0,
+                          "paddingTop": 0,
+                          "paddingBottom": 0,
+                          "parent": {
+                            "id": "I1647:388494;1296:1034;7582:193432",
+                            "name": "Navigation",
+                            "type": "FRAME",
+                            "layoutMode": "HORIZONTAL"
+                          },
+                          "children": [
+                            {
+                              "id": "I1647:388494;1296:1034;7582:193435;3468:423435",
+                              "name": "placeholder",
+                              "type": "INSTANCE",
+                              "visible": false,
+                              "width": 20,
+                              "height": 20,
+                              "x": 0,
+                              "y": 2,
+                              "layoutMode": "NONE",
+                              "layoutSizingHorizontal": "FIXED",
+                              "layoutSizingVertical": "FIXED",
+                              "primaryAxisAlignItems": "MIN",
+                              "counterAxisAlignItems": "MIN",
+                              "itemSpacing": 0,
+                              "layoutPositioning": "AUTO",
+                              "cornerRadius": 0,
+                              "paddingLeft": 0,
+                              "paddingRight": 0,
+                              "paddingTop": 0,
+                              "paddingBottom": 0,
+                              "parent": {
+                                "id": "I1647:388494;1296:1034;7582:193435",
+                                "name": "Buttons/Button",
+                                "type": "INSTANCE",
+                                "layoutMode": "HORIZONTAL"
+                              },
+                              "children": [
+                                {
+                                  "id": "I1647:388494;1296:1034;7582:193435;3468:423435;3465:410041",
+                                  "name": "Icon",
+                                  "type": "VECTOR",
+                                  "visible": true,
+                                  "width": 16.666667938232422,
+                                  "height": 16.666667938232422,
+                                  "x": 1.6666666269302368,
+                                  "y": 1.6666666269302368,
+                                  "layoutPositioning": "AUTO",
+                                  "cornerRadius": 0,
+                                  "parent": {
+                                    "id": "I1647:388494;1296:1034;7582:193435;3468:423435",
+                                    "name": "placeholder",
+                                    "type": "INSTANCE",
+                                    "layoutMode": "NONE"
+                                  }
+                                }
+                              ]
+                            },
+                            {
+                              "id": "I1647:388494;1296:1034;7582:193435;3287:433397",
+                              "name": "Text",
+                              "type": "TEXT",
+                              "visible": true,
+                              "width": 54,
+                              "height": 24,
+                              "x": 0,
+                              "y": 0,
+                              "layoutPositioning": "AUTO",
+                              "characters": "Pricing",
+                              "fontSize": 16,
+                              "textAutoResize": "WIDTH_AND_HEIGHT",
+                              "textAlignHorizontal": "LEFT",
+                              "textAlignVertical": "TOP",
+                              "parent": {
+                                "id": "I1647:388494;1296:1034;7582:193435",
+                                "name": "Buttons/Button",
+                                "type": "INSTANCE",
+                                "layoutMode": "HORIZONTAL"
+                              }
+                            },
+                            {
+                              "id": "I1647:388494;1296:1034;7582:193435;3468:468154",
+                              "name": "placeholder",
+                              "type": "INSTANCE",
+                              "visible": false,
+                              "width": 20,
+                              "height": 20,
+                              "x": 121,
+                              "y": 2,
+                              "layoutMode": "NONE",
+                              "layoutSizingHorizontal": "FIXED",
+                              "layoutSizingVertical": "FIXED",
+                              "primaryAxisAlignItems": "MIN",
+                              "counterAxisAlignItems": "MIN",
+                              "itemSpacing": 0,
+                              "layoutPositioning": "AUTO",
+                              "cornerRadius": 0,
+                              "paddingLeft": 0,
+                              "paddingRight": 0,
+                              "paddingTop": 0,
+                              "paddingBottom": 0,
+                              "parent": {
+                                "id": "I1647:388494;1296:1034;7582:193435",
+                                "name": "Buttons/Button",
+                                "type": "INSTANCE",
+                                "layoutMode": "HORIZONTAL"
+                              },
+                              "children": [
+                                {
+                                  "id": "I1647:388494;1296:1034;7582:193435;3468:468154;3465:410041",
+                                  "name": "Icon",
+                                  "type": "VECTOR",
+                                  "visible": true,
+                                  "width": 16.666667938232422,
+                                  "height": 16.666667938232422,
+                                  "x": 1.6666666269302368,
+                                  "y": 1.6666666269302368,
+                                  "layoutPositioning": "AUTO",
+                                  "cornerRadius": 0,
+                                  "parent": {
+                                    "id": "I1647:388494;1296:1034;7582:193435;3468:468154",
+                                    "name": "placeholder",
+                                    "type": "INSTANCE",
+                                    "layoutMode": "NONE"
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "id": "I1647:388494;1296:1034;7582:194787",
+                          "name": "_Dropdown header navigation trigger",
+                          "type": "INSTANCE",
+                          "visible": true,
+                          "width": 116,
+                          "height": 32,
+                          "x": 346,
+                          "y": 0,
+                          "layoutMode": "VERTICAL",
+                          "layoutSizingHorizontal": "HUG",
+                          "layoutSizingVertical": "HUG",
+                          "primaryAxisAlignItems": "MIN",
+                          "counterAxisAlignItems": "CENTER",
+                          "itemSpacing": 4,
+                          "layoutPositioning": "AUTO",
+                          "cornerRadius": 0,
+                          "paddingLeft": 0,
+                          "paddingRight": 0,
+                          "paddingTop": 0,
+                          "paddingBottom": 0,
+                          "parent": {
+                            "id": "I1647:388494;1296:1034;7582:193432",
+                            "name": "Navigation",
+                            "type": "FRAME",
+                            "layoutMode": "HORIZONTAL"
+                          },
+                          "children": [
+                            {
+                              "id": "I1647:388494;1296:1034;7582:194787;10332:6602",
+                              "name": "_Dropdown header navigation button",
+                              "type": "INSTANCE",
+                              "visible": true,
+                              "width": 116,
+                              "height": 32,
+                              "x": 0,
+                              "y": 0,
+                              "layoutMode": "HORIZONTAL",
+                              "layoutSizingHorizontal": "HUG",
+                              "layoutSizingVertical": "HUG",
+                              "primaryAxisAlignItems": "CENTER",
+                              "counterAxisAlignItems": "CENTER",
+                              "itemSpacing": 2,
+                              "layoutPositioning": "AUTO",
+                              "cornerRadius": 8,
+                              "paddingLeft": 6,
+                              "paddingRight": 6,
+                              "paddingTop": 4,
+                              "paddingBottom": 4,
+                              "parent": {
+                                "id": "I1647:388494;1296:1034;7582:194787",
+                                "name": "_Dropdown header navigation trigger",
+                                "type": "INSTANCE",
+                                "layoutMode": "VERTICAL"
+                              },
+                              "children": [
+                                {
+                                  "id": "I1647:388494;1296:1034;7582:194787;10332:6602;10332:6563",
+                                  "name": "Text padding",
+                                  "type": "FRAME",
+                                  "visible": true,
+                                  "width": 86,
+                                  "height": 24,
+                                  "x": 6,
+                                  "y": 4,
+                                  "layoutMode": "HORIZONTAL",
+                                  "layoutSizingHorizontal": "HUG",
+                                  "layoutSizingVertical": "HUG",
+                                  "primaryAxisAlignItems": "CENTER",
+                                  "counterAxisAlignItems": "CENTER",
+                                  "itemSpacing": 0,
+                                  "layoutPositioning": "AUTO",
+                                  "cornerRadius": 0,
+                                  "paddingLeft": 2,
+                                  "paddingRight": 2,
+                                  "paddingTop": 0,
+                                  "paddingBottom": 0,
+                                  "parent": {
+                                    "id": "I1647:388494;1296:1034;7582:194787;10332:6602",
+                                    "name": "_Dropdown header navigation button",
+                                    "type": "INSTANCE",
+                                    "layoutMode": "HORIZONTAL"
+                                  },
+                                  "children": [
+                                    {
+                                      "id": "I1647:388494;1296:1034;7582:194787;10332:6602;10332:6564",
+                                      "name": "Text",
+                                      "type": "TEXT",
+                                      "visible": true,
+                                      "width": 82,
+                                      "height": 24,
+                                      "x": 2,
+                                      "y": 0,
+                                      "layoutPositioning": "AUTO",
+                                      "characters": "Resources",
+                                      "fontSize": 16,
+                                      "textAutoResize": "WIDTH_AND_HEIGHT",
+                                      "textAlignHorizontal": "LEFT",
+                                      "textAlignVertical": "TOP",
+                                      "parent": {
+                                        "id": "I1647:388494;1296:1034;7582:194787;10332:6602;10332:6563",
+                                        "name": "Text padding",
+                                        "type": "FRAME",
+                                        "layoutMode": "HORIZONTAL"
+                                      }
+                                    }
+                                  ]
+                                },
+                                {
+                                  "id": "I1647:388494;1296:1034;7582:194787;10332:6602;10332:6565",
+                                  "name": "chevron-down",
+                                  "type": "INSTANCE",
+                                  "visible": true,
+                                  "width": 16,
+                                  "height": 16,
+                                  "x": 94,
+                                  "y": 8,
+                                  "layoutMode": "NONE",
+                                  "layoutSizingHorizontal": "FIXED",
+                                  "layoutSizingVertical": "FIXED",
+                                  "primaryAxisAlignItems": "MIN",
+                                  "counterAxisAlignItems": "MIN",
+                                  "itemSpacing": 0,
+                                  "layoutPositioning": "AUTO",
+                                  "cornerRadius": 0,
+                                  "paddingLeft": 0,
+                                  "paddingRight": 0,
+                                  "paddingTop": 0,
+                                  "paddingBottom": 0,
+                                  "parent": {
+                                    "id": "I1647:388494;1296:1034;7582:194787;10332:6602",
+                                    "name": "_Dropdown header navigation button",
+                                    "type": "INSTANCE",
+                                    "layoutMode": "HORIZONTAL"
+                                  },
+                                  "children": [
+                                    {
+                                      "id": "I1647:388494;1296:1034;7582:194787;10332:6602;10332:6565;3463:404534",
+                                      "name": "Icon",
+                                      "type": "VECTOR",
+                                      "visible": true,
+                                      "width": 8,
+                                      "height": 4,
+                                      "x": 4,
+                                      "y": 6,
+                                      "layoutPositioning": "AUTO",
+                                      "cornerRadius": 0,
+                                      "parent": {
+                                        "id": "I1647:388494;1296:1034;7582:194787;10332:6602;10332:6565",
+                                        "name": "chevron-down",
+                                        "type": "INSTANCE",
+                                        "layoutMode": "NONE"
+                                      }
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "id": "I1647:388494;1296:1034;7582:193437",
+                          "name": "Buttons/Button",
+                          "type": "INSTANCE",
+                          "visible": true,
+                          "width": 48,
+                          "height": 24,
+                          "x": 482,
+                          "y": 4,
+                          "layoutMode": "HORIZONTAL",
+                          "layoutSizingHorizontal": "HUG",
+                          "layoutSizingVertical": "HUG",
+                          "primaryAxisAlignItems": "CENTER",
+                          "counterAxisAlignItems": "CENTER",
+                          "itemSpacing": 4,
+                          "layoutPositioning": "AUTO",
+                          "cornerRadius": 0,
+                          "paddingLeft": 0,
+                          "paddingRight": 0,
+                          "paddingTop": 0,
+                          "paddingBottom": 0,
+                          "parent": {
+                            "id": "I1647:388494;1296:1034;7582:193432",
+                            "name": "Navigation",
+                            "type": "FRAME",
+                            "layoutMode": "HORIZONTAL"
+                          },
+                          "children": [
+                            {
+                              "id": "I1647:388494;1296:1034;7582:193437;3468:423435",
+                              "name": "placeholder",
+                              "type": "INSTANCE",
+                              "visible": false,
+                              "width": 20,
+                              "height": 20,
+                              "x": 0,
+                              "y": 2,
+                              "layoutMode": "NONE",
+                              "layoutSizingHorizontal": "FIXED",
+                              "layoutSizingVertical": "FIXED",
+                              "primaryAxisAlignItems": "MIN",
+                              "counterAxisAlignItems": "MIN",
+                              "itemSpacing": 0,
+                              "layoutPositioning": "AUTO",
+                              "cornerRadius": 0,
+                              "paddingLeft": 0,
+                              "paddingRight": 0,
+                              "paddingTop": 0,
+                              "paddingBottom": 0,
+                              "parent": {
+                                "id": "I1647:388494;1296:1034;7582:193437",
+                                "name": "Buttons/Button",
+                                "type": "INSTANCE",
+                                "layoutMode": "HORIZONTAL"
+                              },
+                              "children": [
+                                {
+                                  "id": "I1647:388494;1296:1034;7582:193437;3468:423435;3465:410041",
+                                  "name": "Icon",
+                                  "type": "VECTOR",
+                                  "visible": true,
+                                  "width": 16.666667938232422,
+                                  "height": 16.666667938232422,
+                                  "x": 1.6666666269302368,
+                                  "y": 1.6666666269302368,
+                                  "layoutPositioning": "AUTO",
+                                  "cornerRadius": 0,
+                                  "parent": {
+                                    "id": "I1647:388494;1296:1034;7582:193437;3468:423435",
+                                    "name": "placeholder",
+                                    "type": "INSTANCE",
+                                    "layoutMode": "NONE"
+                                  }
+                                }
+                              ]
+                            },
+                            {
+                              "id": "I1647:388494;1296:1034;7582:193437;3287:433397",
+                              "name": "Text",
+                              "type": "TEXT",
+                              "visible": true,
+                              "width": 48,
+                              "height": 24,
+                              "x": 0,
+                              "y": 0,
+                              "layoutPositioning": "AUTO",
+                              "characters": "About",
+                              "fontSize": 16,
+                              "textAutoResize": "WIDTH_AND_HEIGHT",
+                              "textAlignHorizontal": "LEFT",
+                              "textAlignVertical": "TOP",
+                              "parent": {
+                                "id": "I1647:388494;1296:1034;7582:193437",
+                                "name": "Buttons/Button",
+                                "type": "INSTANCE",
+                                "layoutMode": "HORIZONTAL"
+                              }
+                            },
+                            {
+                              "id": "I1647:388494;1296:1034;7582:193437;3468:468154",
+                              "name": "placeholder",
+                              "type": "INSTANCE",
+                              "visible": false,
+                              "width": 20,
+                              "height": 20,
+                              "x": 121,
+                              "y": 2,
+                              "layoutMode": "NONE",
+                              "layoutSizingHorizontal": "FIXED",
+                              "layoutSizingVertical": "FIXED",
+                              "primaryAxisAlignItems": "MIN",
+                              "counterAxisAlignItems": "MIN",
+                              "itemSpacing": 0,
+                              "layoutPositioning": "AUTO",
+                              "cornerRadius": 0,
+                              "paddingLeft": 0,
+                              "paddingRight": 0,
+                              "paddingTop": 0,
+                              "paddingBottom": 0,
+                              "parent": {
+                                "id": "I1647:388494;1296:1034;7582:193437",
+                                "name": "Buttons/Button",
+                                "type": "INSTANCE",
+                                "layoutMode": "HORIZONTAL"
+                              },
+                              "children": [
+                                {
+                                  "id": "I1647:388494;1296:1034;7582:193437;3468:468154;3465:410041",
+                                  "name": "Icon",
+                                  "type": "VECTOR",
+                                  "visible": true,
+                                  "width": 16.666667938232422,
+                                  "height": 16.666667938232422,
+                                  "x": 1.6666666269302368,
+                                  "y": 1.6666666269302368,
+                                  "layoutPositioning": "AUTO",
+                                  "cornerRadius": 0,
+                                  "parent": {
+                                    "id": "I1647:388494;1296:1034;7582:193437;3468:468154",
+                                    "name": "placeholder",
+                                    "type": "INSTANCE",
+                                    "layoutMode": "NONE"
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "id": "I1647:388494;1296:1034;7582:193438",
+                  "name": "_Navigation actions",
+                  "type": "INSTANCE",
+                  "visible": true,
+                  "width": 168,
+                  "height": 40,
+                  "x": 1036,
+                  "y": 12,
+                  "layoutMode": "HORIZONTAL",
+                  "layoutSizingHorizontal": "HUG",
+                  "layoutSizingVertical": "HUG",
+                  "primaryAxisAlignItems": "MIN",
+                  "counterAxisAlignItems": "CENTER",
+                  "itemSpacing": 12,
+                  "layoutPositioning": "AUTO",
+                  "cornerRadius": 0,
+                  "paddingLeft": 0,
+                  "paddingRight": 0,
+                  "paddingTop": 0,
+                  "paddingBottom": 0,
+                  "parent": {
+                    "id": "I1647:388494;1296:1034;7582:193429",
+                    "name": "Nav wrapper",
+                    "type": "FRAME",
+                    "layoutMode": "HORIZONTAL"
+                  },
+                  "children": [
+                    {
+                      "id": "I1647:388494;1296:1034;7582:193438;1624:262067",
+                      "name": "Buttons/Button",
+                      "type": "INSTANCE",
+                      "visible": true,
+                      "width": 73,
+                      "height": 40,
+                      "x": 0,
+                      "y": 0,
+                      "layoutMode": "HORIZONTAL",
+                      "layoutSizingHorizontal": "HUG",
+                      "layoutSizingVertical": "HUG",
+                      "primaryAxisAlignItems": "CENTER",
+                      "counterAxisAlignItems": "CENTER",
+                      "itemSpacing": 4,
+                      "layoutPositioning": "AUTO",
+                      "cornerRadius": 8,
+                      "paddingLeft": 14,
+                      "paddingRight": 14,
+                      "paddingTop": 10,
+                      "paddingBottom": 10,
+                      "parent": {
+                        "id": "I1647:388494;1296:1034;7582:193438",
+                        "name": "_Navigation actions",
+                        "type": "INSTANCE",
+                        "layoutMode": "HORIZONTAL"
+                      },
+                      "children": [
+                        {
+                          "id": "I1647:388494;1296:1034;7582:193438;1624:262067;3466:438983",
+                          "name": "placeholder",
+                          "type": "INSTANCE",
+                          "visible": false,
+                          "width": 20,
+                          "height": 20,
+                          "x": 14,
+                          "y": 10,
+                          "layoutMode": "NONE",
+                          "layoutSizingHorizontal": "FIXED",
+                          "layoutSizingVertical": "FIXED",
+                          "primaryAxisAlignItems": "MIN",
+                          "counterAxisAlignItems": "MIN",
+                          "itemSpacing": 0,
+                          "layoutPositioning": "AUTO",
+                          "cornerRadius": 0,
+                          "paddingLeft": 0,
+                          "paddingRight": 0,
+                          "paddingTop": 0,
+                          "paddingBottom": 0,
+                          "parent": {
+                            "id": "I1647:388494;1296:1034;7582:193438;1624:262067",
+                            "name": "Buttons/Button",
+                            "type": "INSTANCE",
+                            "layoutMode": "HORIZONTAL"
+                          },
+                          "children": [
+                            {
+                              "id": "I1647:388494;1296:1034;7582:193438;1624:262067;3466:438983;3465:410041",
+                              "name": "Icon",
+                              "type": "VECTOR",
+                              "visible": true,
+                              "width": 16.666667938232422,
+                              "height": 16.666667938232422,
+                              "x": 1.6666666269302368,
+                              "y": 1.6666666269302368,
+                              "layoutPositioning": "AUTO",
+                              "cornerRadius": 0,
+                              "parent": {
+                                "id": "I1647:388494;1296:1034;7582:193438;1624:262067;3466:438983",
+                                "name": "placeholder",
+                                "type": "INSTANCE",
+                                "layoutMode": "NONE"
+                              }
+                            }
+                          ]
+                        },
+                        {
+                          "id": "I1647:388494;1296:1034;7582:193438;1624:262067;6153:34804",
+                          "name": "Text padding",
+                          "type": "FRAME",
+                          "visible": true,
+                          "width": 45,
+                          "height": 20,
+                          "x": 14,
+                          "y": 10,
+                          "layoutMode": "HORIZONTAL",
+                          "layoutSizingHorizontal": "HUG",
+                          "layoutSizingVertical": "HUG",
+                          "primaryAxisAlignItems": "CENTER",
+                          "counterAxisAlignItems": "CENTER",
+                          "itemSpacing": 0,
+                          "layoutPositioning": "AUTO",
+                          "cornerRadius": 0,
+                          "paddingLeft": 2,
+                          "paddingRight": 2,
+                          "paddingTop": 0,
+                          "paddingBottom": 0,
+                          "parent": {
+                            "id": "I1647:388494;1296:1034;7582:193438;1624:262067",
+                            "name": "Buttons/Button",
+                            "type": "INSTANCE",
+                            "layoutMode": "HORIZONTAL"
+                          },
+                          "children": [
+                            {
+                              "id": "I1647:388494;1296:1034;7582:193438;1624:262067;3287:433113",
+                              "name": "Text",
+                              "type": "TEXT",
+                              "visible": true,
+                              "width": 41,
+                              "height": 20,
+                              "x": 2,
+                              "y": 0,
+                              "layoutPositioning": "AUTO",
+                              "characters": "Log in",
+                              "fontSize": 14,
+                              "textAutoResize": "WIDTH_AND_HEIGHT",
+                              "textAlignHorizontal": "LEFT",
+                              "textAlignVertical": "TOP",
+                              "parent": {
+                                "id": "I1647:388494;1296:1034;7582:193438;1624:262067;6153:34804",
+                                "name": "Text padding",
+                                "type": "FRAME",
+                                "layoutMode": "HORIZONTAL"
+                              }
+                            }
+                          ]
+                        },
+                        {
+                          "id": "I1647:388494;1296:1034;7582:193438;1624:262067;3466:449084",
+                          "name": "placeholder",
+                          "type": "INSTANCE",
+                          "visible": false,
+                          "width": 20,
+                          "height": 20,
+                          "x": 124,
+                          "y": 10,
+                          "layoutMode": "NONE",
+                          "layoutSizingHorizontal": "FIXED",
+                          "layoutSizingVertical": "FIXED",
+                          "primaryAxisAlignItems": "MIN",
+                          "counterAxisAlignItems": "MIN",
+                          "itemSpacing": 0,
+                          "layoutPositioning": "AUTO",
+                          "cornerRadius": 0,
+                          "paddingLeft": 0,
+                          "paddingRight": 0,
+                          "paddingTop": 0,
+                          "paddingBottom": 0,
+                          "parent": {
+                            "id": "I1647:388494;1296:1034;7582:193438;1624:262067",
+                            "name": "Buttons/Button",
+                            "type": "INSTANCE",
+                            "layoutMode": "HORIZONTAL"
+                          },
+                          "children": [
+                            {
+                              "id": "I1647:388494;1296:1034;7582:193438;1624:262067;3466:449084;3465:410041",
+                              "name": "Icon",
+                              "type": "VECTOR",
+                              "visible": true,
+                              "width": 16.666667938232422,
+                              "height": 16.666667938232422,
+                              "x": 1.6666666269302368,
+                              "y": 1.6666666269302368,
+                              "layoutPositioning": "AUTO",
+                              "cornerRadius": 0,
+                              "parent": {
+                                "id": "I1647:388494;1296:1034;7582:193438;1624:262067;3466:449084",
+                                "name": "placeholder",
+                                "type": "INSTANCE",
+                                "layoutMode": "NONE"
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "id": "I1647:388494;1296:1034;7582:193438;1624:262069",
+                      "name": "Buttons/Button",
+                      "type": "INSTANCE",
+                      "visible": true,
+                      "width": 83,
+                      "height": 40,
+                      "x": 85,
+                      "y": 0,
+                      "layoutMode": "HORIZONTAL",
+                      "layoutSizingHorizontal": "HUG",
+                      "layoutSizingVertical": "HUG",
+                      "primaryAxisAlignItems": "CENTER",
+                      "counterAxisAlignItems": "CENTER",
+                      "itemSpacing": 4,
+                      "layoutPositioning": "AUTO",
+                      "cornerRadius": 8,
+                      "paddingLeft": 14,
+                      "paddingRight": 14,
+                      "paddingTop": 10,
+                      "paddingBottom": 10,
+                      "parent": {
+                        "id": "I1647:388494;1296:1034;7582:193438",
+                        "name": "_Navigation actions",
+                        "type": "INSTANCE",
+                        "layoutMode": "HORIZONTAL"
+                      },
+                      "children": [
+                        {
+                          "id": "I1647:388494;1296:1034;7582:193438;1624:262069;3466:410053",
+                          "name": "placeholder",
+                          "type": "INSTANCE",
+                          "visible": false,
+                          "width": 20,
+                          "height": 20,
+                          "x": 14,
+                          "y": 10,
+                          "layoutMode": "NONE",
+                          "layoutSizingHorizontal": "FIXED",
+                          "layoutSizingVertical": "FIXED",
+                          "primaryAxisAlignItems": "MIN",
+                          "counterAxisAlignItems": "MIN",
+                          "itemSpacing": 0,
+                          "layoutPositioning": "AUTO",
+                          "cornerRadius": 0,
+                          "paddingLeft": 0,
+                          "paddingRight": 0,
+                          "paddingTop": 0,
+                          "paddingBottom": 0,
+                          "parent": {
+                            "id": "I1647:388494;1296:1034;7582:193438;1624:262069",
+                            "name": "Buttons/Button",
+                            "type": "INSTANCE",
+                            "layoutMode": "HORIZONTAL"
+                          },
+                          "children": [
+                            {
+                              "id": "I1647:388494;1296:1034;7582:193438;1624:262069;3466:410053;3465:410041",
+                              "name": "Icon",
+                              "type": "VECTOR",
+                              "visible": true,
+                              "width": 16.666667938232422,
+                              "height": 16.666667938232422,
+                              "x": 1.6666666269302368,
+                              "y": 1.6666666269302368,
+                              "layoutPositioning": "AUTO",
+                              "cornerRadius": 0,
+                              "parent": {
+                                "id": "I1647:388494;1296:1034;7582:193438;1624:262069;3466:410053",
+                                "name": "placeholder",
+                                "type": "INSTANCE",
+                                "layoutMode": "NONE"
+                              }
+                            }
+                          ]
+                        },
+                        {
+                          "id": "I1647:388494;1296:1034;7582:193438;1624:262069;6153:27135",
+                          "name": "Text padding",
+                          "type": "FRAME",
+                          "visible": true,
+                          "width": 55,
+                          "height": 20,
+                          "x": 14,
+                          "y": 10,
+                          "layoutMode": "HORIZONTAL",
+                          "layoutSizingHorizontal": "HUG",
+                          "layoutSizingVertical": "HUG",
+                          "primaryAxisAlignItems": "CENTER",
+                          "counterAxisAlignItems": "CENTER",
+                          "itemSpacing": 0,
+                          "layoutPositioning": "AUTO",
+                          "cornerRadius": 0,
+                          "paddingLeft": 2,
+                          "paddingRight": 2,
+                          "paddingTop": 0,
+                          "paddingBottom": 0,
+                          "parent": {
+                            "id": "I1647:388494;1296:1034;7582:193438;1624:262069",
+                            "name": "Buttons/Button",
+                            "type": "INSTANCE",
+                            "layoutMode": "HORIZONTAL"
+                          },
+                          "children": [
+                            {
+                              "id": "I1647:388494;1296:1034;7582:193438;1624:262069;3287:432941",
+                              "name": "Text",
+                              "type": "TEXT",
+                              "visible": true,
+                              "width": 51,
+                              "height": 20,
+                              "x": 2,
+                              "y": 0,
+                              "layoutPositioning": "AUTO",
+                              "characters": "Sign up",
+                              "fontSize": 14,
+                              "textAutoResize": "WIDTH_AND_HEIGHT",
+                              "textAlignHorizontal": "LEFT",
+                              "textAlignVertical": "TOP",
+                              "parent": {
+                                "id": "I1647:388494;1296:1034;7582:193438;1624:262069;6153:27135",
+                                "name": "Text padding",
+                                "type": "FRAME",
+                                "layoutMode": "HORIZONTAL"
+                              }
+                            }
+                          ]
+                        },
+                        {
+                          "id": "I1647:388494;1296:1034;7582:193438;1624:262069;3466:422626",
+                          "name": "placeholder",
+                          "type": "INSTANCE",
+                          "visible": false,
+                          "width": 20,
+                          "height": 20,
+                          "x": 124,
+                          "y": 10,
+                          "layoutMode": "NONE",
+                          "layoutSizingHorizontal": "FIXED",
+                          "layoutSizingVertical": "FIXED",
+                          "primaryAxisAlignItems": "MIN",
+                          "counterAxisAlignItems": "MIN",
+                          "itemSpacing": 0,
+                          "layoutPositioning": "AUTO",
+                          "cornerRadius": 0,
+                          "paddingLeft": 0,
+                          "paddingRight": 0,
+                          "paddingTop": 0,
+                          "paddingBottom": 0,
+                          "parent": {
+                            "id": "I1647:388494;1296:1034;7582:193438;1624:262069",
+                            "name": "Buttons/Button",
+                            "type": "INSTANCE",
+                            "layoutMode": "HORIZONTAL"
+                          },
+                          "children": [
+                            {
+                              "id": "I1647:388494;1296:1034;7582:193438;1624:262069;3466:422626;3465:410041",
+                              "name": "Icon",
+                              "type": "VECTOR",
+                              "visible": true,
+                              "width": 16.666667938232422,
+                              "height": 16.666667938232422,
+                              "x": 1.6666666269302368,
+                              "y": 1.6666666269302368,
+                              "layoutPositioning": "AUTO",
+                              "cornerRadius": 0,
+                              "parent": {
+                                "id": "I1647:388494;1296:1034;7582:193438;1624:262069;3466:422626",
+                                "name": "placeholder",
+                                "type": "INSTANCE",
+                                "layoutMode": "NONE"
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

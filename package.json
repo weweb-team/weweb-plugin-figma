@@ -9,7 +9,11 @@
     "release": "plugma release",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "typecheck": "vue-tsc --noEmit -p tsconfig.app.json"
+    "typecheck": "vue-tsc --noEmit -p tsconfig.app.json",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:run": "vitest run",
+    "test:coverage": "vitest run --coverage"
   },
   "dependencies": {
     "@vueuse/core": "^13.5.0",
@@ -30,12 +34,17 @@
     "@tailwindcss/vite": "^4.1.11",
     "@types/node": "^24.0.10",
     "@vitejs/plugin-vue": "^6.0.0",
+    "@vitest/ui": "^3.2.4",
+    "@vue/test-utils": "^2.4.6",
     "@vue/tsconfig": "^0.7.0",
     "eslint": "^9.30.1",
+    "happy-dom": "^18.0.1",
+    "jsdom": "^26.1.0",
     "plugma": "^1.2.10",
     "tailwindcss": "^4.1.11",
     "typescript": "~5.8.3",
     "vite": "^7.0.0",
+    "vitest": "^3.2.4",
     "vue-tsc": "^2.2.12"
   },
   "plugma": {

@@ -1,0 +1,812 @@
+[
+  {
+    "uid": "34",
+    "tag": "ww-div",
+    "name": "Root Container",
+    "styles": {
+      "default": {
+        "width": "100%",
+        "display": "flex",
+        "flexDirection": "column",
+        "alignItems": "center"
+      }
+    },
+    "slots": {
+      "children": [
+        {
+          "uid": "0",
+          "tag": "ww-div",
+          "name": "Dropdown header navigation",
+          "styles": {
+            "default": {
+              "display": "flex",
+              "flexDirection": "column",
+              "alignItems": "stretch"
+            }
+          },
+          "slots": {
+            "children": [
+              {
+                "uid": "1",
+                "tag": "ww-div",
+                "name": "Header",
+                "styles": {
+                  "default": {
+                    "display": "flex",
+                    "width": "100%",
+                    "paddingTop": "12px",
+                    "flexDirection": "column",
+                    "alignItems": "center",
+                    "justifyContent": "center"
+                  },
+                  "tablet": {
+                    "maxWidth": "100%"
+                  }
+                },
+                "slots": {
+                  "children": [
+                    {
+                      "uid": "2",
+                      "tag": "ww-div",
+                      "name": "Container",
+                      "styles": {
+                        "default": {
+                          "display": "flex",
+                          "width": "100%",
+                          "maxWidth": "1280px",
+                          "paddingLeft": "32px",
+                          "paddingRight": "32px",
+                          "alignItems": "center",
+                          "justifyContent": "space-between"
+                        },
+                        "tablet": {
+                          "maxWidth": "100%",
+                          "paddingLeft": "20px",
+                          "paddingRight": "20px"
+                        }
+                      },
+                      "slots": {
+                        "children": [
+                          {
+                            "uid": "3",
+                            "tag": "ww-div",
+                            "name": "Nav wrapper",
+                            "styles": {
+                              "default": {
+                                "justifyContent": "space-between",
+                                "alignItems": "center",
+                                "borderRadius": "16px",
+                                "border": "1px solid var(--Gray-200, #E9EAEB)",
+                                "boxShadow": "0px 1px 2px 0px rgba(10, 13, 18, 0.05)",
+                                "alignSelf": "stretch",
+                                "display": "flex",
+                                "minWidth": "240px",
+                                "marginTop": "auto",
+                                "marginBottom": "auto",
+                                "width": "100%",
+                                "paddingLeft": "16px",
+                                "paddingRight": "12px",
+                                "paddingTop": "12px",
+                                "paddingBottom": "12px",
+                                "gap": "40px 100px",
+                                "flexWrap": "wrap",
+                                "flex": "1",
+                                "flexShrink": "1",
+                                "flexBasis": "0%",
+                                "background": "var(--Base-White, #FFF)"
+                              },
+                              "tablet": {
+                                "maxWidth": "100%"
+                              }
+                            },
+                            "slots": {
+                              "children": [
+                                {
+                                  "uid": "4",
+                                  "tag": "ww-div",
+                                  "name": "Content",
+                                  "styles": {
+                                    "default": {
+                                      "alignSelf": "stretch",
+                                      "display": "flex",
+                                      "minWidth": "240px",
+                                      "marginTop": "auto",
+                                      "marginBottom": "auto",
+                                      "alignItems": "center",
+                                      "gap": "32px",
+                                      "justifyContent": "start",
+                                      "flexWrap": "wrap"
+                                    },
+                                    "tablet": {
+                                      "maxWidth": "100%"
+                                    }
+                                  },
+                                  "slots": {
+                                    "children": [
+                                      {
+                                        "uid": "5",
+                                        "tag": "ww-div",
+                                        "name": "Logo",
+                                        "styles": {
+                                          "default": {
+                                            "alignSelf": "stretch",
+                                            "display": "flex",
+                                            "marginTop": "auto",
+                                            "marginBottom": "auto",
+                                            "alignItems": "start",
+                                            "justifyContent": "start",
+                                            "width": "139px"
+                                          }
+                                        },
+                                        "slots": {
+                                          "children": [
+                                            {
+                                              "uid": "6",
+                                              "tag": "ww-image",
+                                              "name": "Logo wrap",
+                                              "props": {
+                                                "default": {
+                                                  "url": "https://cdn.builder.io/api/v1/image/assets/9142fca66d1a45a3b2a0699197883012/98a138a76d1eabc833b70757b4c5dc7c83f56a46?placeholderIfAbsent=true"
+                                                }
+                                              },
+                                              "styles": {
+                                                "default": {
+                                                  "position": "relative",
+                                                  "display": "flex",
+                                                  "width": "139px"
+                                                }
+                                              }
+                                            }
+                                          ]
+                                        }
+                                      },
+                                      {
+                                        "uid": "7",
+                                        "tag": "ww-div",
+                                        "name": "Navigation",
+                                        "styles": {
+                                          "default": {
+                                            "alignSelf": "stretch",
+                                            "display": "flex",
+                                            "minWidth": "240px",
+                                            "marginTop": "auto",
+                                            "marginBottom": "auto",
+                                            "alignItems": "center",
+                                            "gap": "20px",
+                                            "fontFamily": "'Inter', sans-serif",
+                                            "fontSize": "16px",
+                                            "color": "var(--Gray-700, #414651)",
+                                            "fontWeight": "600",
+                                            "whiteSpace": "nowrap",
+                                            "justifyContent": "start",
+                                            "flexWrap": "wrap"
+                                          },
+                                          "tablet": {
+                                            "maxWidth": "100%",
+                                            "whiteSpace": "initial"
+                                          }
+                                        },
+                                        "slots": {
+                                          "children": [
+                                            {
+                                              "uid": "8",
+                                              "tag": "ww-div",
+                                              "name": "_Dropdown header navigation trigger",
+                                              "styles": {
+                                                "default": {
+                                                  "alignSelf": "stretch",
+                                                  "display": "flex",
+                                                  "marginTop": "auto",
+                                                  "marginBottom": "auto",
+                                                  "flexDirection": "column",
+                                                  "alignItems": "center",
+                                                  "justifyContent": "start"
+                                                },
+                                                "tablet": {
+                                                  "whiteSpace": "initial"
+                                                }
+                                              },
+                                              "slots": {
+                                                "children": [
+                                                  {
+                                                    "uid": "9",
+                                                    "tag": "ww-div",
+                                                    "name": "_Dropdown header navigation button",
+                                                    "styles": {
+                                                      "default": {
+                                                        "borderRadius": "8px",
+                                                        "display": "flex",
+                                                        "paddingLeft": "6px",
+                                                        "paddingRight": "6px",
+                                                        "paddingTop": "4px",
+                                                        "paddingBottom": "4px",
+                                                        "alignItems": "center",
+                                                        "gap": "2px",
+                                                        "overflow": "hidden",
+                                                        "justifyContent": "center"
+                                                      },
+                                                      "tablet": {
+                                                        "whiteSpace": "initial"
+                                                      }
+                                                    },
+                                                    "slots": {
+                                                      "children": [
+                                                        {
+                                                          "uid": "10",
+                                                          "tag": "ww-div",
+                                                          "styles": {
+                                                            "default": {
+                                                              "alignSelf": "stretch",
+                                                              "display": "flex",
+                                                              "marginTop": "auto",
+                                                              "marginBottom": "auto",
+                                                              "paddingLeft": "2px",
+                                                              "paddingRight": "2px",
+                                                              "alignItems": "center",
+                                                              "justifyContent": "center"
+                                                            },
+                                                            "tablet": {
+                                                              "whiteSpace": "initial"
+                                                            }
+                                                          },
+                                                          "slots": {
+                                                            "children": [
+                                                              {
+                                                                "uid": "11",
+                                                                "tag": "ww-text",
+                                                                "name": "Text",
+                                                                "props": {
+                                                                  "default": {
+                                                                    "tag": "span",
+                                                                    "text": {
+                                                                      "en": "Resources"
+                                                                    }
+                                                                  }
+                                                                },
+                                                                "styles": {
+                                                                  "default": {
+                                                                    "color": "var(--Gray-700, #414651)",
+                                                                    "alignSelf": "stretch",
+                                                                    "marginTop": "auto",
+                                                                    "marginBottom": "auto"
+                                                                  }
+                                                                }
+                                                              }
+                                                            ]
+                                                          }
+                                                        },
+                                                        {
+                                                          "uid": "12",
+                                                          "tag": "ww-image",
+                                                          "name": "chevron-down",
+                                                          "props": {
+                                                            "default": {
+                                                              "url": "https://cdn.builder.io/api/v1/image/assets/9142fca66d1a45a3b2a0699197883012/498b5de449055a2eda4ce2f5b30807b13a39a8a2?placeholderIfAbsent=true"
+                                                            }
+                                                          },
+                                                          "styles": {
+                                                            "default": {
+                                                              "alignSelf": "stretch",
+                                                              "position": "relative",
+                                                              "display": "flex",
+                                                              "marginTop": "auto",
+                                                              "marginBottom": "auto",
+                                                              "width": "16px",
+                                                              "flexShrink": "0"
+                                                            }
+                                                          }
+                                                        }
+                                                      ]
+                                                    }
+                                                  }
+                                                ]
+                                              }
+                                            },
+                                            {
+                                              "uid": "13",
+                                              "tag": "ww-div",
+                                              "name": "_Dropdown header navigation trigger",
+                                              "styles": {
+                                                "default": {
+                                                  "alignSelf": "stretch",
+                                                  "display": "flex",
+                                                  "marginTop": "auto",
+                                                  "marginBottom": "auto",
+                                                  "flexDirection": "column",
+                                                  "alignItems": "center",
+                                                  "justifyContent": "start"
+                                                },
+                                                "tablet": {
+                                                  "whiteSpace": "initial"
+                                                }
+                                              },
+                                              "slots": {
+                                                "children": [
+                                                  {
+                                                    "uid": "14",
+                                                    "tag": "ww-div",
+                                                    "name": "_Dropdown header navigation button",
+                                                    "styles": {
+                                                      "default": {
+                                                        "borderRadius": "8px",
+                                                        "display": "flex",
+                                                        "paddingLeft": "6px",
+                                                        "paddingRight": "6px",
+                                                        "paddingTop": "4px",
+                                                        "paddingBottom": "4px",
+                                                        "alignItems": "center",
+                                                        "gap": "2px",
+                                                        "overflow": "hidden",
+                                                        "justifyContent": "center"
+                                                      },
+                                                      "tablet": {
+                                                        "whiteSpace": "initial"
+                                                      }
+                                                    },
+                                                    "slots": {
+                                                      "children": [
+                                                        {
+                                                          "uid": "15",
+                                                          "tag": "ww-div",
+                                                          "styles": {
+                                                            "default": {
+                                                              "alignSelf": "stretch",
+                                                              "display": "flex",
+                                                              "marginTop": "auto",
+                                                              "marginBottom": "auto",
+                                                              "paddingLeft": "2px",
+                                                              "paddingRight": "2px",
+                                                              "alignItems": "center",
+                                                              "justifyContent": "center"
+                                                            },
+                                                            "tablet": {
+                                                              "whiteSpace": "initial"
+                                                            }
+                                                          },
+                                                          "slots": {
+                                                            "children": [
+                                                              {
+                                                                "uid": "16",
+                                                                "tag": "ww-text",
+                                                                "name": "Text",
+                                                                "props": {
+                                                                  "default": {
+                                                                    "tag": "span",
+                                                                    "text": {
+                                                                      "en": "Resources"
+                                                                    }
+                                                                  }
+                                                                },
+                                                                "styles": {
+                                                                  "default": {
+                                                                    "color": "var(--Gray-700, #414651)",
+                                                                    "alignSelf": "stretch",
+                                                                    "marginTop": "auto",
+                                                                    "marginBottom": "auto"
+                                                                  }
+                                                                }
+                                                              }
+                                                            ]
+                                                          }
+                                                        },
+                                                        {
+                                                          "uid": "17",
+                                                          "tag": "ww-image",
+                                                          "name": "chevron-down",
+                                                          "props": {
+                                                            "default": {
+                                                              "url": "https://cdn.builder.io/api/v1/image/assets/9142fca66d1a45a3b2a0699197883012/498b5de449055a2eda4ce2f5b30807b13a39a8a2?placeholderIfAbsent=true"
+                                                            }
+                                                          },
+                                                          "styles": {
+                                                            "default": {
+                                                              "alignSelf": "stretch",
+                                                              "position": "relative",
+                                                              "display": "flex",
+                                                              "marginTop": "auto",
+                                                              "marginBottom": "auto",
+                                                              "width": "16px",
+                                                              "flexShrink": "0"
+                                                            }
+                                                          }
+                                                        }
+                                                      ]
+                                                    }
+                                                  }
+                                                ]
+                                              }
+                                            },
+                                            {
+                                              "uid": "18",
+                                              "tag": "ww-div",
+                                              "name": "Buttons/Button",
+                                              "styles": {
+                                                "default": {
+                                                  "alignSelf": "stretch",
+                                                  "display": "flex",
+                                                  "marginTop": "auto",
+                                                  "marginBottom": "auto",
+                                                  "alignItems": "center",
+                                                  "gap": "4px",
+                                                  "overflow": "hidden",
+                                                  "color": "var(--Gray-600, #535862)",
+                                                  "justifyContent": "center"
+                                                },
+                                                "tablet": {
+                                                  "whiteSpace": "initial"
+                                                }
+                                              },
+                                              "slots": {
+                                                "children": [
+                                                  {
+                                                    "uid": "19",
+                                                    "tag": "ww-text",
+                                                    "name": "Text",
+                                                    "props": {
+                                                      "default": {
+                                                        "tag": "span",
+                                                        "text": {
+                                                          "en": "Pricing"
+                                                        }
+                                                      }
+                                                    },
+                                                    "styles": {
+                                                      "default": {
+                                                        "color": "var(--Gray-600, #535862)",
+                                                        "alignSelf": "stretch",
+                                                        "marginTop": "auto",
+                                                        "marginBottom": "auto"
+                                                      }
+                                                    }
+                                                  }
+                                                ]
+                                              }
+                                            },
+                                            {
+                                              "uid": "20",
+                                              "tag": "ww-div",
+                                              "name": "_Dropdown header navigation trigger",
+                                              "styles": {
+                                                "default": {
+                                                  "alignSelf": "stretch",
+                                                  "display": "flex",
+                                                  "marginTop": "auto",
+                                                  "marginBottom": "auto",
+                                                  "flexDirection": "column",
+                                                  "alignItems": "center",
+                                                  "justifyContent": "start"
+                                                },
+                                                "tablet": {
+                                                  "whiteSpace": "initial"
+                                                }
+                                              },
+                                              "slots": {
+                                                "children": [
+                                                  {
+                                                    "uid": "21",
+                                                    "tag": "ww-div",
+                                                    "name": "_Dropdown header navigation button",
+                                                    "styles": {
+                                                      "default": {
+                                                        "borderRadius": "8px",
+                                                        "display": "flex",
+                                                        "paddingLeft": "6px",
+                                                        "paddingRight": "6px",
+                                                        "paddingTop": "4px",
+                                                        "paddingBottom": "4px",
+                                                        "alignItems": "center",
+                                                        "gap": "2px",
+                                                        "overflow": "hidden",
+                                                        "justifyContent": "center"
+                                                      },
+                                                      "tablet": {
+                                                        "whiteSpace": "initial"
+                                                      }
+                                                    },
+                                                    "slots": {
+                                                      "children": [
+                                                        {
+                                                          "uid": "22",
+                                                          "tag": "ww-div",
+                                                          "styles": {
+                                                            "default": {
+                                                              "alignSelf": "stretch",
+                                                              "display": "flex",
+                                                              "marginTop": "auto",
+                                                              "marginBottom": "auto",
+                                                              "paddingLeft": "2px",
+                                                              "paddingRight": "2px",
+                                                              "alignItems": "center",
+                                                              "justifyContent": "center"
+                                                            },
+                                                            "tablet": {
+                                                              "whiteSpace": "initial"
+                                                            }
+                                                          },
+                                                          "slots": {
+                                                            "children": [
+                                                              {
+                                                                "uid": "23",
+                                                                "tag": "ww-text",
+                                                                "name": "Text",
+                                                                "props": {
+                                                                  "default": {
+                                                                    "tag": "span",
+                                                                    "text": {
+                                                                      "en": "Resources"
+                                                                    }
+                                                                  }
+                                                                },
+                                                                "styles": {
+                                                                  "default": {
+                                                                    "color": "var(--Gray-700, #414651)",
+                                                                    "alignSelf": "stretch",
+                                                                    "marginTop": "auto",
+                                                                    "marginBottom": "auto"
+                                                                  }
+                                                                }
+                                                              }
+                                                            ]
+                                                          }
+                                                        },
+                                                        {
+                                                          "uid": "24",
+                                                          "tag": "ww-image",
+                                                          "name": "chevron-down",
+                                                          "props": {
+                                                            "default": {
+                                                              "url": "https://cdn.builder.io/api/v1/image/assets/9142fca66d1a45a3b2a0699197883012/498b5de449055a2eda4ce2f5b30807b13a39a8a2?placeholderIfAbsent=true"
+                                                            }
+                                                          },
+                                                          "styles": {
+                                                            "default": {
+                                                              "alignSelf": "stretch",
+                                                              "position": "relative",
+                                                              "display": "flex",
+                                                              "marginTop": "auto",
+                                                              "marginBottom": "auto",
+                                                              "width": "16px",
+                                                              "flexShrink": "0"
+                                                            }
+                                                          }
+                                                        }
+                                                      ]
+                                                    }
+                                                  }
+                                                ]
+                                              }
+                                            },
+                                            {
+                                              "uid": "25",
+                                              "tag": "ww-div",
+                                              "name": "Buttons/Button",
+                                              "styles": {
+                                                "default": {
+                                                  "alignSelf": "stretch",
+                                                  "display": "flex",
+                                                  "marginTop": "auto",
+                                                  "marginBottom": "auto",
+                                                  "alignItems": "center",
+                                                  "gap": "4px",
+                                                  "overflow": "hidden",
+                                                  "color": "var(--Gray-600, #535862)",
+                                                  "justifyContent": "center"
+                                                },
+                                                "tablet": {
+                                                  "whiteSpace": "initial"
+                                                }
+                                              },
+                                              "slots": {
+                                                "children": [
+                                                  {
+                                                    "uid": "26",
+                                                    "tag": "ww-text",
+                                                    "name": "Text",
+                                                    "props": {
+                                                      "default": {
+                                                        "tag": "span",
+                                                        "text": {
+                                                          "en": "About"
+                                                        }
+                                                      }
+                                                    },
+                                                    "styles": {
+                                                      "default": {
+                                                        "color": "var(--Gray-600, #535862)",
+                                                        "alignSelf": "stretch",
+                                                        "marginTop": "auto",
+                                                        "marginBottom": "auto"
+                                                      }
+                                                    }
+                                                  }
+                                                ]
+                                              }
+                                            }
+                                          ]
+                                        }
+                                      }
+                                    ]
+                                  }
+                                },
+                                {
+                                  "uid": "27",
+                                  "tag": "ww-div",
+                                  "name": "_Navigation actions",
+                                  "styles": {
+                                    "default": {
+                                      "alignSelf": "stretch",
+                                      "display": "flex",
+                                      "marginTop": "auto",
+                                      "marginBottom": "auto",
+                                      "alignItems": "center",
+                                      "gap": "12px",
+                                      "fontFamily": "'Inter', sans-serif",
+                                      "fontSize": "14px",
+                                      "fontWeight": "600",
+                                      "lineHeight": "1.43",
+                                      "justifyContent": "start"
+                                    }
+                                  },
+                                  "slots": {
+                                    "children": [
+                                      {
+                                        "uid": "28",
+                                        "tag": "ww-div",
+                                        "name": "Buttons/Button",
+                                        "styles": {
+                                          "default": {
+                                            "justifyContent": "center",
+                                            "alignItems": "center",
+                                            "borderRadius": "8px",
+                                            "border": "1px solid var(--Gray-300, #D5D7DA)",
+                                            "boxShadow": "0px 0px 0px 1px rgba(10, 13, 18, 0.18) inset, 0px -2px 0px 0px rgba(10, 13, 18, 0.05) inset, 0px 1px 2px 0px rgba(10, 13, 18, 0.05)",
+                                            "alignSelf": "stretch",
+                                            "display": "flex",
+                                            "marginTop": "auto",
+                                            "marginBottom": "auto",
+                                            "paddingLeft": "14px",
+                                            "paddingRight": "14px",
+                                            "paddingTop": "10px",
+                                            "paddingBottom": "10px",
+                                            "gap": "4px",
+                                            "overflow": "hidden",
+                                            "color": "var(--Gray-700, #414651)",
+                                            "background": "var(--Base-White, #FFF)"
+                                          }
+                                        },
+                                        "slots": {
+                                          "children": [
+                                            {
+                                              "uid": "29",
+                                              "tag": "ww-div",
+                                              "styles": {
+                                                "default": {
+                                                  "alignSelf": "stretch",
+                                                  "display": "flex",
+                                                  "marginTop": "auto",
+                                                  "marginBottom": "auto",
+                                                  "paddingLeft": "2px",
+                                                  "paddingRight": "2px",
+                                                  "alignItems": "center",
+                                                  "justifyContent": "center"
+                                                }
+                                              },
+                                              "slots": {
+                                                "children": [
+                                                  {
+                                                    "uid": "30",
+                                                    "tag": "ww-text",
+                                                    "name": "Text",
+                                                    "props": {
+                                                      "default": {
+                                                        "tag": "span",
+                                                        "text": {
+                                                          "en": "Log in"
+                                                        }
+                                                      }
+                                                    },
+                                                    "styles": {
+                                                      "default": {
+                                                        "color": "var(--Gray-700, #414651)",
+                                                        "alignSelf": "stretch",
+                                                        "marginTop": "auto",
+                                                        "marginBottom": "auto"
+                                                      }
+                                                    }
+                                                  }
+                                                ]
+                                              }
+                                            }
+                                          ]
+                                        }
+                                      },
+                                      {
+                                        "uid": "31",
+                                        "tag": "ww-div",
+                                        "name": "Buttons/Button",
+                                        "styles": {
+                                          "default": {
+                                            "justifyContent": "center",
+                                            "alignItems": "center",
+                                            "borderRadius": "8px",
+                                            "border": "2px solid var(--Gradient-skeuemorphic-gradient-border, rgba(255, 255, 255, 0.12))",
+                                            "boxShadow": "0px 0px 0px 1px rgba(10, 13, 18, 0.18) inset, 0px -2px 0px 0px rgba(10, 13, 18, 0.05) inset, 0px 1px 2px 0px rgba(10, 13, 18, 0.05)",
+                                            "alignSelf": "stretch",
+                                            "display": "flex",
+                                            "marginTop": "auto",
+                                            "marginBottom": "auto",
+                                            "paddingLeft": "14px",
+                                            "paddingRight": "14px",
+                                            "paddingTop": "10px",
+                                            "paddingBottom": "10px",
+                                            "gap": "4px",
+                                            "overflow": "hidden",
+                                            "color": "var(--Base-White, #FFF)",
+                                            "background": "var(--Brand-600, #7F56D9)"
+                                          }
+                                        },
+                                        "slots": {
+                                          "children": [
+                                            {
+                                              "uid": "32",
+                                              "tag": "ww-div",
+                                              "styles": {
+                                                "default": {
+                                                  "alignSelf": "stretch",
+                                                  "display": "flex",
+                                                  "marginTop": "auto",
+                                                  "marginBottom": "auto",
+                                                  "paddingLeft": "2px",
+                                                  "paddingRight": "2px",
+                                                  "alignItems": "center",
+                                                  "justifyContent": "center"
+                                                }
+                                              },
+                                              "slots": {
+                                                "children": [
+                                                  {
+                                                    "uid": "33",
+                                                    "tag": "ww-text",
+                                                    "name": "Text",
+                                                    "props": {
+                                                      "default": {
+                                                        "tag": "span",
+                                                        "text": {
+                                                          "en": "Sign up"
+                                                        }
+                                                      }
+                                                    },
+                                                    "styles": {
+                                                      "default": {
+                                                        "color": "var(--Base-White, #FFF)",
+                                                        "alignSelf": "stretch",
+                                                        "marginTop": "auto",
+                                                        "marginBottom": "auto"
+                                                      }
+                                                    }
+                                                  }
+                                                ]
+                                              }
+                                            }
+                                          ]
+                                        }
+                                      }
+                                    ]
+                                  }
+                                }
+                              ]
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+]

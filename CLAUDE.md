@@ -30,3 +30,9 @@ Use dynamic Iconify classes: `icon-[prefix--name]`
 - Use Tailwind utility classes (avoid custom CSS)
 - Follow WeWeb design system colors (see src/styles.css)
 - Dark mode: Components auto-adapt via CSS variables
+
+## Testing
+
+- Test setup file: `__test__/setup.ts` - Contains Figma API mocks
+- Run tests: `pnpm test`
+- Update snapshots: `pnpm vitest run <test-file> -u`

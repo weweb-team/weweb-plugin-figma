@@ -1,3 +1,5 @@
+import type { ConversionSettings } from './types/conversion';
+import { ConversionWorkflow } from './figma-to-weweb/simple-converter';
 // Figma Plugin - Copy Figma Nodes
 import { VariableExtractor } from './variable-extractor';
 
@@ -10,7 +12,10 @@ export default function () {
     });
 
     figma.ui.onmessage = async (message) => {
+        console.log('[Plugin] Received message:', message);
+
         if (message.type === 'GET_SELECTION') {
+            console.log('[Plugin] Handling GET_SELECTION');
             postSelection();
         }
 
@@ -35,6 +40,88 @@ export default function () {
                 figma.ui.postMessage({
                     type: 'VARIABLES_EXTRACTED',
                     variables: null,
+                    error: error instanceof Error ? error.message : String(error),
+                });
+            }
+        }
+
+        if (message.type === 'EXPORT_TO_WEWEB') {
+            console.log('[Plugin] Handling EXPORT_TO_WEWEB');
+            console.log('[Plugin] Settings:', message.settings);
+
+            try {
+                const settings: ConversionSettings = message.settings || {
+                    responsive: true,
+                    optimizeAssets: true,
+                    trackPerformance: false,
+                };
+
+                console.log('[Plugin] Final settings:', settings);
+
+                const selection = figma.currentPage.selection;
+                console.log('[Plugin] Current selection:', selection.length, 'items');
+
+                if (selection.length === 0) {
+                    console.log('[Plugin] No selection found, sending error');
+                    figma.ui.postMessage({
+                        type: 'EXPORT_ERROR',
+                        error: 'No selection found. Please select a Figma node to export.',
+                    });
+                    return;
+                }
+
+                console.log('[Plugin] Selected node:', selection[0].name, selection[0].type);
+
+                // Progress callback
+                const onProgress = (message: string) => {
+                    console.log('[Plugin] Progress:', message);
+                    figma.ui.postMessage({
+                        type: 'EXPORT_PROGRESS',
+                        message,
+                    });
+                };
+
+                // Skip variable extraction - we'll collect them during conversion
+                const variables: Record<string, any> = {};
+                const fonts: any[] = [];
+
+                // Convert to WeWeb format
+                console.log('[Plugin] Starting WeWeb conversion...');
+                onProgress('Converting to WeWeb format...');
+                const workflow = new ConversionWorkflow();
+                const conversionResult = await workflow.convertSelection(
+                    variables,
+                    fonts,
+                    onProgress,
+                );
+                console.log('[Plugin] Conversion completed:', conversionResult);
+
+                // Prepare result
+                const result = {
+                    component: conversionResult.component,
+                    usedVariables: conversionResult.usedVariables || {},
+                    fonts: conversionResult.fonts || [],
+                    assets: conversionResult.assets || {},
+                    performance: settings.trackPerformance
+                        ? {
+                                totalTime: 500, // Mock timing for now
+                                nodeCount: 1,
+                                variableResolutions: Object.keys(conversionResult.usedVariables || {}).length,
+                                imageExtractions: Object.keys(conversionResult.assets || {}).length,
+                                cacheHitRate: 0.85,
+                            }
+                        : undefined,
+                };
+
+                console.log('[Plugin] Sending EXPORT_COMPLETE with result:', result);
+                figma.ui.postMessage({
+                    type: 'EXPORT_COMPLETE',
+                    result,
+                });
+            } catch (error) {
+                console.error('[Plugin] Export error:', error);
+                figma.ui.postMessage({
+                    type: 'EXPORT_ERROR',
                     error: error instanceof Error ? error.message : String(error),
                 });
             }
